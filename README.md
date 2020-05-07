@@ -12,3 +12,4 @@ The previous decision results in (gemakkelijker testen kleine subdelen, gemakkel
 tips&tricks:
 https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf
 https://www.youtube.com/watch?v=jOh-7ImGQZo
+(video vanaf 11 min nuttig, 
