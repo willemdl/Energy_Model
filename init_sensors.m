@@ -20,7 +20,7 @@ disp('started init_sensors');
 % 4) power deviation in [%] 
 % mxn m is row, n is column
 Sensor = zeros(7,7);
-Sensorname(1) = "TMP117"; %The name of the sensor
+Sensorname(1,1) = "TMP117"; %The name of the sensor
 Sensor(2,1) = 24; %Default measurement rate [n times per day]
 Sensor(3,1) = 3.3; %Voltage at which the sensor operates. [V] 
 Sensor(4,1) = 0.135; %Current drawn during measurement. [mA]
@@ -29,7 +29,7 @@ Sensor(6,1) = 1; %Time to process/change data of 1 measurement based on a clock 
 Sensor(7,1) = 0.00015;%current drawn during standby / deepsleep.[mA]
 
 
-Sensorname(2) = "Si7051"; %The name of the sensor
+Sensorname(2,1) = "Si7051"; %The name of the sensor
 Sensor(2,2) = 24; %Default measurement rate [n times per day]
 Sensor(3,2) = 2.8; %Voltage at which the sensor operates. [V] 
 Sensor(4,2) = 0.09; %Current drawn during measurement. [mA]
