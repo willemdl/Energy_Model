@@ -8,3 +8,4 @@ disp('back to main');
 disp('back to main2');
 resultsensorstemp(NoS, N_Max, E_consumed);
 disp('back to main3');
+disp('test');
