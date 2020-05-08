@@ -1,3 +1,5 @@
+clear all
+close all
 %% initialize parameters
 [Sensor, Sensorname] = init_main();
 
@@ -10,5 +12,6 @@
 
 
 %% invoke plots and other graphical results
+disp_sensors(Results_calc_sensors, Sensorname);
 
 
