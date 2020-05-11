@@ -1,6 +1,6 @@
 function [MCU, MCUname] = init_mcu()
 %the output of this function should be 1 big matrix, each column is a
-%different sensor, each row is a different parameter. The following
+%different MCU, each row is a different parameter. The following
 %parameters need to be defined:
 % 1) The name of the MCU.
 % 2) Default measurement rate. [n times per day]
