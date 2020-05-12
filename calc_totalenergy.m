@@ -27,7 +27,7 @@ dt = 1;%Step size of the time.[s] bare in mind that if dt is too large
 %than calculations wil be wrong.
 t=2;%This is the actual time which will be stored in time()
 z=1;%This is used to keep track of how often and when measurement takes place.
-T_Total = 500000;
+T_Total = 5000;
 
 % T_Processing is the total time the MCU spends on processing the measured data.
 measurements2 = zeros(100,NoS+2);
