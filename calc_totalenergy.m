@@ -27,14 +27,14 @@ dt = 1;%Step size of the time.[s] bare in mind that if dt is too large
 %than calculations wil be wrong.
 t=2;%This is the actual time which will be stored in time()
 z=1;%This is used to keep track of how often and when measurement takes place.
-T_Total = 5000;
+T_Total = 500000;
 
 % T_Processing is the total time the MCU spends on processing the measured data.
 measurements2 = zeros(100,NoS+2);
-time = zeros(100);
-P_Total = zeros(T_Total/dt);
-E_Total = zeros(T_Total/dt);
-tltest = zeros(T_Total/dt);
+time = zeros(100,1);
+P_Total = zeros(T_Total/dt,1);
+E_Total = zeros(T_Total/dt,1);
+tltest = zeros(T_Total/dt,1);
 
 %% The large loop
 for i=1:1:NoS
@@ -48,11 +48,11 @@ while t < T_Total
     %% Energy usage during sleep
     P_DS_tot = sum(P_DS_S(:))+P_DS_MCU +P_DS_Com;
     P_Total(t) = P_DS_tot;
-    E_Total(t) = E_Total(t-dt)*P_DS_tot*dt;
-    
+    E_Total(t) = E_Total(t-dt)+P_DS_tot*dt;
+    t= t+dt;
     
     %% Energy usage during activities
-    if rem(t,1)==0 %this is an easier check than the next if thus should make the matlab script faster
+    if mod(t,1)==0 %this is an easier check than the next if thus should make the matlab script faster
         if any(mod(t,I_Array(:,1)) == 0) %gives true if any interval is true
             measurements = I_Array(find(~mod(t,I_Array(:,1))),2:end);%gives an vector of all
             measurements2(z,:) = sum(measurements,1);
@@ -116,12 +116,9 @@ while t < T_Total
             
             
             
-            z=z+1;
-        else
-            
+            z=z+1;           
         end
     end
-    t= t+dt;
 end
 disp('Finished calc_totalenergy function');
 end
