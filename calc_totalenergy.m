@@ -27,7 +27,7 @@ dt = 1;%Step size of the time.[s] bare in mind that if dt is too large
 %than calculations wil be wrong.
 t=2;%This is the actual time which will be stored in time()
 z=1;%This is used to keep track of how often and when measurement takes place.
-T_Total = 5000;
+T_Total = 500000;
 
 % T_Processing is the total time the MCU spends on processing the measured data.
 measurements2 = zeros(100,NoS+2);
@@ -80,8 +80,8 @@ while t < T_Total
             T_Processing = 0; % At each new interval the processing time can be different.
             for n=1:1:NoS
                 if measurements2(z,n)~=0
-                    P_M_MCU = 0;
-                    P_M_S(n) = 0;
+                    P_M_MCU = S_MCU(3,1)*S_MCU(4,1)*S_MCU(8,1);
+                    P_M_S(n) = S_Sensors(3,n)*S_Sensors(4,n);
                     P_DS_rest = sum(P_DS_S(:))-P_DS_S(n)+P_DS_Com;
                     P_M_tot = P_M_MCU + P_M_S(n)+P_DS_rest;
                     T_Processing = T_Processing + S_Sensors(6,n);% (6,n) -> time to process 1 measurement based on 32MHz
@@ -93,8 +93,7 @@ while t < T_Total
                     end
                 end
             end
-            %% Energy usage during processing stage [_P_]
-   
+            %% Energy usage during processing stage [_P_]   
             P_P_MCU = S_MCU(3,1)*S_MCU(4,1)*S_MCU(8,1);%(3,1)=V (4,1)=mA/MHz (8,1)=MHz
             P_P_Com = S_Com(3,1)*S_Com(8,1); % Communication module is set in active mode. 
             P_P_tot = P_P_MCU +P_P_Com +sum(P_DS_S(:));
