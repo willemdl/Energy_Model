@@ -20,7 +20,7 @@ disp('started init_sensors');
 % 4) power deviation in [%] 
 % mxn m is row, n is column
 Sensor = zeros(7,7);
-Sensorname(1) = "TMP117"; %The name of the sensor
+Sensorname(1,1) = "TMP117"; %The name of the sensor
 Sensor(2,1) = 24; %Default measurement rate [n times per day]
 Sensor(3,1) = 3.3; %Voltage at which the sensor operates. [V] 
 Sensor(4,1) = 0.135; %Current drawn during measurement. [mA]
@@ -29,7 +29,7 @@ Sensor(6,1) = 1; %Time to process/change data of 1 measurement based on a clock 
 Sensor(7,1) = 0.00015;%current drawn during standby / deepsleep.[mA]
 
 
-Sensorname(2) = "Si7051"; %The name of the sensor
+Sensorname(1,2) = "Si7051"; %The name of the sensor
 Sensor(2,2) = 24; %Default measurement rate [n times per day]
 Sensor(3,2) = 2.8; %Voltage at which the sensor operates. [V] 
 Sensor(4,2) = 0.09; %Current drawn during measurement. [mA]
@@ -37,5 +37,40 @@ Sensor(5,2) = 7; %Time it takes to do 1 measurement. [ms]
 Sensor(6,2) = 1; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[] 
 Sensor(7,2) = 0.00006;%current drawn during standby / deepsleep.[mA]
 
+
+Sensorname(1,3) = "AS6212"; %The name of the sensor
+Sensor(2,3) = 24; %Default measurement rate [n times per day]
+Sensor(3,3) = 3; %Voltage at which the sensor operates. [V] 
+Sensor(4,3) = 0.04; %Current drawn during measurement. [mA]
+Sensor(5,3) = 36; %Time it takes to do 1 measurement. [ms]
+Sensor(6,3) = 1; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[] 
+Sensor(7,3) = 0.00010;%current drawn during standby / deepsleep.[mA]
+
+
+Sensorname(1,4) = "MCP9808"; %The name of the sensor
+Sensor(2,4) = 24; %Default measurement rate [n times per day]
+Sensor(3,4) = 3.3; %Voltage at which the sensor operates. [V] 
+Sensor(4,4) = 0.2; %Current drawn during measurement. [mA]
+Sensor(5,4) = 250; %Time it takes to do 1 measurement. [ms]
+Sensor(6,4) = 1; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[] 
+Sensor(7,4) = 0.00010;%current drawn during standby / deepsleep.[mA]
+
+
+Sensorname(1,5) = "MAX30208"; %The name of the sensor
+Sensor(2,5) = 24; %Default measurement rate [n times per day]
+Sensor(3,5) = 1.8; %Voltage at which the sensor operates. [V] 
+Sensor(4,5) = 0.067; %Current drawn during measurement. [mA]
+Sensor(5,5) = 15; %Time it takes to do 1 measurement. [ms]
+Sensor(6,5) = 1; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[] 
+Sensor(7,5) = 0.0005;%current drawn during standby / deepsleep.[mA]
+
+
+Sensorname(1,6) = "MAX44006"; %The name of the sensor
+Sensor(2,6) = 24; %Default measurement rate [n times per day]
+Sensor(3,6) = 1.8; %Voltage at which the sensor operates. [V] 
+Sensor(4,6) = 0.01; %Current drawn during measurement. [mA]
+Sensor(5,6) = 400; %Time it takes to do 1 measurement. [ms]
+Sensor(6,6) = 1; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[] 
+Sensor(7,6) = 0.00001;%current drawn during standby / deepsleep.[mA]
 disp('finished init_sensors');
 end
