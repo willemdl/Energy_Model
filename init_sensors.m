@@ -20,8 +20,8 @@ disp('started init_sensors');
 % mxn m is row, n is column
 
 Sensordata = zeros(6,6);
-info_str = ["TMP117","Si7051","AS6212","MCP9808","MAX30208","MAX44006","TMP102";
-            "Temp","Temp","Temp","Temp","Temp","Temp","Temp"]
+Sensorname = ["TMP117","Si7051","AS6212","MCP9808","MAX30208","MAX44006","TMP102";
+            "Temp","Temp","Temp","Temp","Temp","Temp","Temp"];
     
 %TMP117
 %Temperatuur
