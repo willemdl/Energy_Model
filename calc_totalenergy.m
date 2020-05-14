@@ -56,7 +56,7 @@ tltest = zeros(T_Total/dt,1);
 
 %% The large loop
 for i=1:1:NoS
-    P_DS_S(i) = S_Sensors(3,i)*S_Sensors(7,i);%in mW (3,i)=[V] (7,i)=mA
+    P_DS_S(i) = S_Sensors(2,i)*S_Sensors(6,i);%in mW (2,i)=[V] (6,i)=mA
 end
 P_DS_MCU = S_MCU(3,1)*S_MCU(7,1);%in mW
 P_DS_Com = S_Com(3,1)*S_Com(10,1);%in mW
@@ -99,7 +99,7 @@ while time(k) < T_Total  %nu alleen gebaseerd op tijd, 2e while of iets voor ber
                 time(k) = time(k-1) +dt;  
             end
             %% Energy usage measurement stage [_M_]
-            % S_Sensors(x,1) x=3 -> voltage x=4-> current during measurement
+            % S_Sensors(x,1) x=2 -> voltage x=3-> current during measurement
             % x=5-> time for that measurement
             % It has been assumed that only the MCU and sensor which is
             % being measured are active, all other systemparts(other
@@ -108,11 +108,11 @@ while time(k) < T_Total  %nu alleen gebaseerd op tijd, 2e while of iets voor ber
             for n=1:1:NoS
                 if measurements2(z,n)~=0
                     P_M_MCU = S_MCU(3,1)*S_MCU(4,1)*S_MCU(8,1);
-                    P_M_S(n) = S_Sensors(3,n)*S_Sensors(4,n);
+                    P_M_S(n) = S_Sensors(2,n)*S_Sensors(3,n);
                     P_DS_rest = sum(P_DS_S(:))-P_DS_S(n)+P_DS_Com;
                     P_M_tot = P_M_MCU + P_M_S(n)+P_DS_rest;
-                    T_Processing = T_Processing + S_Sensors(6,n);% (6,n) -> time to process 1 measurement based on 32MHz
-                    for tl=0:dt:S_Sensors(5,n) %------------nog fixen!! dt is in [s] en (5,n) in [ms]
+                    T_Processing = T_Processing + S_Sensors(5,n);% (6,n) -> time[s] to process 1 measurement based on 32MHz
+                    for tl=0:dt:S_Sensors(4,n) % (5,n) time measuring[s]
                         k = k+1;
                         P_Total(k) = P_M_tot;
                         E_Total(k) = E_Total(k-1) + P_M_tot*dt;
