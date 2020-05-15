@@ -1,36 +1,36 @@
-function [] = disp_totalenergy(P_Sub, P_Total, E_Total, T_Array, tmeasurement)
+function [] = disp_totalenergy(P_Sub, E_sub, time, tmeasurement)
 disp('started disp_totalenergy');
 
 figure();
-plot(T_Array(:), E_Total(:));
+plot(time(:), E_sub(:,end-1));
 title('Energy usage');
 xlabel('Time');
-xlim([0 max(T_Array(:))]);
+xlim([0 max(time(:))]);
 ylabel('E [mJ]');
 legend('Energy');
 
 figure();
-plot(T_Array(:), P_Total(:));
+plot(time(:), P_Sub(:,end-1));
 title('Power drawn');
 xlabel('Time');
-xlim([0 max(T_Array(:))]);
+xlim([0 max(time(:))]);
 ylabel('P [mW]');
 legend('Power');
 
 figure();
-plot(T_Array(:), P_Sub(:,5));
+plot(time(:), P_Sub(:,end-1));
 title('Power drawn2');
 xlabel('Time');
-xlim([0 max(T_Array(:))]);
+xlim([0 max(time(:))]);
 ylabel('P [mW]');
 legend('Power');
 
 
 figure();
-semilogy(T_Array(1:end-1),diff(T_Array),'-x'); %https://nl.mathworks.com/help/physmod/simscape/ug/determine-step-size.html
+semilogy(time(1:end-1),diff(time),'-x'); %https://nl.mathworks.com/help/physmod/simscape/ug/determine-step-size.html
 title('Step size of totalenergy');
 xlabel('Time');
-xlim([0 max(T_Array(:))]);
+xlim([0 max(time(:))]);
 ylabel('Step size [s]');
 
 
@@ -40,10 +40,10 @@ ylabel('Step size [s]');
 %maar ook de combinaties van deze intervallen. als we de tijden kunnen
 %bepalen wanneer deze combinaties voor het eerst plaats vinden dan kunnen
 %we al deze mogelijkheden bijelkaar/naastelkaar plotten. 
-M_Plot = 1;
+M_Plot = 2;
 test = (tmeasurement(M_Plot,2)-tmeasurement(M_Plot,1))/2;
 figure();
-plot(T_Array(:), P_Total(:));
+plot(time(:), P_Sub(:,end-1));
 xlim([(tmeasurement(M_Plot,1)-test) (tmeasurement(M_Plot,2)+test)]);
 title('Power drawn measuremnt1');
 xlabel('Time');
@@ -52,7 +52,7 @@ legend('Power');
 disp('finished disp_totalenergy');
 
 figure();
-plot(T_Array(:), P_Sub(:,6));
+plot(time(:), P_Sub(:,6));
 xlim([(tmeasurement(M_Plot,1)-test) (tmeasurement(M_Plot,2)+test)]);
 title('Stages measuremnt1');
 xlabel('Time');

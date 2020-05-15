@@ -1,4 +1,4 @@
-function [ P_Sub, E_Sub, P_Total, E_Total, measurements3, time, tmeasurement, tltest] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max)
+function [ P_Sub, E_Sub, measurements3, time, tmeasurement, tltest] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max)
 disp('Started calc_totalenergy function');
 %input; one array with the sensors that will be used,
 %one vector with MCU parameters, one vector with transmission parameters.
@@ -26,7 +26,7 @@ P_DS_S = zeros(1,NoS); %P_S_ means power during Deep Sleep _S refers to Sensor
 
 %dt = .1;%Step size of the time.[s] bare in mind that if dt is too large
 %the symulation will not be accurate or fails.
-dt_l=0.001;
+dt_l=0.0001;
 %dt_l kan ook automatisch gemaakt worden, zoek in alle input parameters
 %naar de kleinste tijd(of met meeste decimalen) en baseer daar de stapgrote
 %op.
@@ -51,11 +51,9 @@ z=0;%This is used to keep track of how often and when measurement takes place.
 % T_Processing is the total time the MCU spends on processing the measured data.
 measurements2 = zeros(100,NoS+2);
 P_Sub = zeros(T_Max/dt, NoS+4);%--- uitleggen hoe werkt en noemen dat Ptot pas aan einde word berekend/toegevoegd.
-E_Sub = zeros(T_Max/dt, NoS+4);
-P_Total = zeros(T_Max/dt,1);
-E_Total = zeros(T_Max/dt,1);
-tltest = zeros(T_Max/dt,1);
 
+%tltest = zeros(T_Max/dt,1);
+tltest=0;
 %% The large loop
 for i=1:1:NoS
     P_DS_S(1,i) = S_Sensors(2,i)*S_Sensors(6,i);%in mW (2,i)=[V] (6,i)=mA
@@ -64,15 +62,17 @@ P_DS_MCU = S_MCU(3,1)*S_MCU(7,1);%in mW
 P_DS_Com = S_Com(3,1)*S_Com(10,1);%in mW
 
 while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berekenen tot wanneer energie op is.
-    %----------------- mogelijk maken om te bepalen welk verbruik bij welk
-    %deel hoord.
+
     %------------- "ik doe deze meting en daarvoor had ik x lang in
     %standbay kunnen staan"
-    %------------- energie verbruik per stage bepalen (per tijd of als
-    %som?)
-    %------------- energie verbruik per sensor, mcu, transmissie bepalen
-    %(per tijd of als som?)
+    %------------- een functie maken van dt_test 
+    %------------- code opruimen en netter inrichten. 
     %% Energy usage during sleep
+    k = k+1;
+    P_Sub(k,1:NoS) = P_DS_S(:);
+    P_Sub(k,NoS+1:NoS+2) = [P_DS_MCU P_DS_Com];
+    P_Sub(k,NoS+4) = 1;
+    time(k) = time(k-1) +dt;
     if mod(floor(time(k)),dt_h)==0 %floor rond af naar beneden en zorgt voor integer
         %use biggest stepsize possible
         dt=dt_h;
@@ -84,26 +84,11 @@ while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berek
         %dt=dt_l;
         dt = 1;
     end
-    k = k+1;
-    P_DS_tot = sum(P_DS_S(:))+P_DS_MCU +P_DS_Com;
-    
-    for i=1:1:NoS
-        P_Sub(k,i) = P_DS_S(i);
-    end
-    P_Sub(k,1:NoS) = P_DS_S(:);
-    P_Sub(k,NoS+1:NoS+2) = [P_DS_MCU P_DS_Com];
-    P_Sub(k,NoS+4) = 1;
-    E_Sub(k,1:NoS+2) = E_Sub(k-1,1:NoS+2) + P_Sub(k,1:NoS+2)*dt;
-    
-    P_Total(k) = P_DS_tot;
-    E_Total(k) = E_Total(k-1)+P_DS_tot*dt;
-    time(k) = time(k-1) +dt;
     
     %% Energy usage during activities
     %if mod(time(k),1)%this is an easier check than the next if thus should make the matlab script faster
     if any(~mod(floor(time(k)),I_Array(:,1))) %gives true if any interval is true
         z=z+1;
-        dt=dt_l;
         measurements = I_Array(find(~mod(floor(time(k)),I_Array(:,1))),2:end);%gives an vector of all
         measurements2(z,:) = sum(measurements,1);
         tmeasurement(z,1) = time(k);%saves the times at which the if statement was true, and thus the measurement started
@@ -124,16 +109,11 @@ while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berek
         end
         clear dt_test;
         for tl=0:dt:S_MCU(6,1)
+            %tltest(k) = tl;
             k = k+1;
-            
             P_Sub(k,1:NoS) = P_DS_S(:); %all sensors in DS
             P_Sub(k,NoS+1:NoS+2) = [P_WU_MCU P_DS_Com];
             P_Sub(k,NoS+4) = 2;
-            E_Sub(k,1:NoS+2) = E_Sub(k-1,1:NoS+2) + P_Sub(k,1:NoS+2)*dt;
-            
-            P_Total(k) = P_WU_tot;
-            E_Total(k) = E_Total(k-1) +P_WU_tot*dt;
-            tltest(k) = tl;
             time(k) = time(k-1) +dt;
         end
         %% Energy usage measurement stage [_M_]
@@ -162,17 +142,12 @@ while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berek
                 end
                 clear dt_test;
                 for tl=0:dt:S_Sensors(4,n) % (4,n) time measuring[s]
+                    %tltest(k) = tl;
                     k = k+1;
-                    
                     P_Sub(k,1:NoS) = P_DS_S(:); %all sensors in DS
                     P_Sub(k,n) = P_M_S(n); %change the one that has been activated
                     P_Sub(k,NoS+1:NoS+2) = [P_M_MCU P_M_Com]; %Communication module is still in DS
                     P_Sub(k,NoS+4) = 3;
-                    E_Sub(k,1:NoS+2) = E_Sub(k-1,1:NoS+2) + P_Sub(k,1:NoS+2)*dt;
-                    
-                    P_Total(k) = P_M_tot;
-                    E_Total(k) = E_Total(k-1) + P_M_tot*dt;
-                    tltest(k) = tl;
                     time(k) = time(k-1) +dt;
                 end
             end
@@ -186,22 +161,17 @@ while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berek
         dt_test = strsplit(num2str(T_MCU_tot),'.'); %https://nl.mathworks.com/matlabcentral/answers/347325-find-the-precision-of-a-value
         if size(dt_test,2)==1 %https://nl.mathworks.com/matlabcentral/answers/16383-how-do-i-check-for-empty-cells-within-a-list
             dt = 1;
-        else 
+        else
             dt=1*10^(-1*numel(dt_test{2}));
         end
         clear dt_test;
         for tl=0:dt:T_MCU_tot
             k = k+1;
-            
             P_Sub(k,1:NoS) = P_DS_S(:); %all sensors in DS during processing stage.
             P_Sub(k,NoS+1:NoS+2) = [P_P_MCU P_P_Com]; %Communication module is still in DS
             P_Sub(k,NoS+4) = 4;
-            E_Sub(k,1:NoS+2) = E_Sub(k-1,1:NoS+2) + P_Sub(k,1:NoS+2)*dt;
-            
-            P_Total(k) = P_P_tot;
-            E_Total(k) = E_Total(k-1) + P_P_tot*dt;
-            tltest(k) = tl;
             time(k) = time(k-1) +dt;
+            %tltest(k) = tl;
         end
         %% Energy usage during transmision stage [_Tr_]
         % is leuk als volgorde en hoeveelheid van Tx en Rx ingegeven
@@ -219,17 +189,18 @@ while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berek
 end
 %truncate vectors and matrices
 time = [0 ; nonzeros(time(:))];
-E_Sub(:,NoS+4) = P_Sub(:,NoS+4); %copy the stage indicator from P_Sub to E_Sub
+
 P_Sub(:,NoS+3) = sum(P_Sub(:,1:NoS+2),2); %sum horizontally
 P_Sub = [zeros(1,NoS+4); P_Sub(any(P_Sub,2),:)];
+E_Sub = zeros(max(size(P_Sub)),NoS+4);
+for k=2:1:max(size(P_Sub))
+    E_Sub(k,1:NoS+3) = E_Sub(k-1,1:NoS+3) + P_Sub(k,1:NoS+3)*dt;
+end
+E_Sub(:,NoS+4) = P_Sub(:,NoS+4); %copy the stage indicator from P_Sub to E_Sub
 
-E_Sub(:,NoS+3) = sum(E_Sub(:,1:NoS+2),2); %sum horizontally
-E_Sub = [zeros(1,NoS+4); E_Sub(any(E_Sub,2),:)];
-
-
+%E_Sub = [zeros(1,NoS+4); E_Sub(any(E_Sub,2),:)];
 
 measurements3= measurements2( any(measurements2,2), :);%https://nl.mathworks.com/matlabcentral/answers/40018-delete-zeros-rows-and-columns
-P_Total = [0 ; P_Total(any(E_Total,2),:)];
-E_Total = [0 ; E_Total(any(E_Total,2),:)];
+
 disp('Finished calc_totalenergy function');
 end

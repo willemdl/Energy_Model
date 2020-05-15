@@ -1,4 +1,3 @@
-clear all
 close all
 %% initialize parameters
 [T_alive, E_available, Sensor, Sensorname, MCU, MCUname, Transmission, Transmissionname] = init_main();
@@ -21,10 +20,11 @@ E_Max = 1000;
 % sensors have been defined to be on (1) or off(0) than follows the MCU and 
 % lastly the communication. Make sure the order of sensors is of the same
 % as the matrix S_Sensors.
-[ P_Sub, E_Sub, P_Total, E_Total, measurements2, time,tmeasurement, tltest] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max);
+[P_Sub, E_Sub, measurements2, time,tmeasurement, tltest] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max);
+
 
 %% invoke plots and other graphical results
 %disp_sensors(Results_calc_sensors, Sensorname);
-disp_totalenergy(P_Sub, P_Total, E_Total, time, tmeasurement);
+disp_totalenergy(P_Sub, E_Sub, time, tmeasurement);
 
 
