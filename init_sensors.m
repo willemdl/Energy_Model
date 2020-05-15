@@ -21,7 +21,7 @@ disp('started init_sensors');
 % 4) power deviation in [%] 
 % mxn m is row, n is column
 
-Sensordata = zeros(8,21);
+Sensor = zeros(8,21);
 %% Sensors[Temperature,Respiratory]
     
 Sensorname(1,1) = "TP117";
@@ -78,7 +78,7 @@ Sensordata(6,6) = 400 * 10^-3; %Time it takes to do 1 measurement. [s]
 Sensordata(7,6) = 1 * 10^-3; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 Sensordata(8,6) = 0.01 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,7) = "TMP102"; %incompleet
+Sensorname(1,7) = "TMP102"; 
 Sensorname(2,7) = "Temperature";
 Sensordata(3,7) = 24; %Default measurement rate [n times per day]
 Sensordata(4,7) = 3.3; %Voltage at which the sensor operates. [V] 
@@ -87,7 +87,7 @@ Sensordata(6,7) = 26 * 10^-3; %Time it takes to do 1 measurement. [s]
 Sensordata(7,7) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 Sensordata(8,7) = 10 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,8) = "STTS751"; %
+Sensorname(1,8) = "STTS751"; 
 Sensorname(2,8) = "Temperature";
 Sensordata(3,8) = 24; %Default measurement rate [n times per day]
 Sensordata(4,8) = 3; %Voltage at which the sensor operates. [V] 
@@ -114,104 +114,104 @@ Sensordata(6,10) = 44 * 10^-3; %Time it takes to do 1 measurement. [s]
 Sensordata(7,10) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 Sensordata(8,10) = 1.65 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,11) = "LIS3DH"; %incompleet
+Sensorname(1,11) = "LIS3DH";
 Sensorname(2,11) = "Respiratory";
-Sensordata(3,11) = 0; %Default measurement rate [n times per day]
-Sensordata(4,11) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,11) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,11) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,11) = 24; %Default measurement rate [n times per day]
+Sensordata(4,11) = 2.5; %Voltage at which the sensor operates. [V] 
+Sensordata(5,11) = 20 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,11) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,11) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,11) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,11) = 0.5 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,12) = "MMA8491Q"; %incompleet
+Sensorname(1,12) = "MMA8491Q";
 Sensorname(2,12) = "Respiratory";
-Sensordata(3,12) = 0; %Default measurement rate [n times per day]
-Sensordata(4,12) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,12) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,12) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,12) = 24; %Default measurement rate [n times per day]
+Sensordata(4,12) = 1.8; %Voltage at which the sensor operates. [V] 
+Sensordata(5,12) = 40 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,12) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,12) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,12) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,12) = 0.002 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,13) = "ADXL363"; %incompleet
+Sensorname(1,13) = "ADXL363";
 Sensorname(2,13) = "Respiratory";
-Sensordata(3,13) = 0; %Default measurement rate [n times per day]
-Sensordata(4,13) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,13) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,13) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,13) = 24; %Default measurement rate [n times per day]
+Sensordata(4,13) = 3.5; %Voltage at which the sensor operates. [V] 
+Sensordata(5,13) = 13 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,13) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,13) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,13) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,13) = 0.01 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,14) = "ADXL362"; %incompleet
+Sensorname(1,14) = "ADXL362";
 Sensorname(2,14) = "Respiratory";
-Sensordata(3,14) = 0; %Default measurement rate [n times per day]
-Sensordata(4,14) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,14) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,14) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,14) = 24; %Default measurement rate [n times per day]
+Sensordata(4,14) = 3.5; %Voltage at which the sensor operates. [V] 
+Sensordata(5,14) = 13 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,14) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,14) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,14) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,14) = 0.01 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,15) = "ADXL357"; %incompleet
+Sensorname(1,15) = "ADXL357";
 Sensorname(2,15) = "Respiratory";
-Sensordata(3,15) = 0; %Default measurement rate [n times per day]
-Sensordata(4,15) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,15) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,15) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,15) = 24; %Default measurement rate [n times per day]
+Sensordata(4,15) = 3.3; %Voltage at which the sensor operates. [V] 
+Sensordata(5,15) = 200 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,15) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,15) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,15) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,15) = 21 * 10^-3 ;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,16) = "ADXL345"; %incompleet
+Sensorname(1,16) = "ADXL345";
 Sensorname(2,16) = "Respiratory";
-Sensordata(3,16) = 0; %Default measurement rate [n times per day]
-Sensordata(4,16) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,16) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,16) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,16) = 24; %Default measurement rate [n times per day]
+Sensordata(4,16) = 2.5; %Voltage at which the sensor operates. [V] 
+Sensordata(5,16) = 50 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,16) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,16) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,16) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,16) = 3.5 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,17) = "BMA423"; %incompleet
+Sensorname(1,17) = "BMA423";
 Sensorname(2,17) = "Respiratory";
-Sensordata(3,17) = 0; %Default measurement rate [n times per day]
-Sensordata(4,17) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,17) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,17) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,17) = 24; %Default measurement rate [n times per day]
+Sensordata(4,17) = 1.8; %Voltage at which the sensor operates. [V] 
+Sensordata(5,17) = 22 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,17) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,17) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,17) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,17) = 3.5 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,18) = "BMA456"; %incompleet
+Sensorname(1,18) = "BMA456";
 Sensorname(2,18) = "Respiratory";
-Sensordata(3,18) = 0; %Default measurement rate [n times per day]
-Sensordata(4,18) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,18) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,18) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,18) = 24; %Default measurement rate [n times per day]
+Sensordata(4,18) = 1.8; %Voltage at which the sensor operates. [V] 
+Sensordata(5,18) = 22 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,18) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,18) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,18) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,18) = 3.5 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,19) = "BMA280"; %incompleet
+Sensorname(1,19) = "BMA280";
 Sensorname(2,19) = "Respiratory";
-Sensordata(3,19) = 0; %Default measurement rate [n times per day]
-Sensordata(4,19) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,19) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,19) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,19) = 24; %Default measurement rate [n times per day]
+Sensordata(4,19) = 2.4; %Voltage at which the sensor operates. [V] 
+Sensordata(5,19) = 22 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,19) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,19) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,19) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,19) = 2.1 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,20) = "LIS2DS12"; %incompleet
+Sensorname(1,20) = "LIS2DS12";
 Sensorname(2,20) = "Respiratory";
-Sensordata(3,20) = 0; %Default measurement rate [n times per day]
-Sensordata(4,20) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,20) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,20) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,20) = 24; %Default measurement rate [n times per day]
+Sensordata(4,20) = 1.8; %Voltage at which the sensor operates. [V] 
+Sensordata(5,20) = 150 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,20) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,20) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,20) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,20) = 0.7 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,21) = "IIS2DLPC"; %incompleet
+Sensorname(1,21) = "IIS2DLPC";
 Sensorname(2,21) = "Respiratory";
-Sensordata(3,21) = 0; %Default measurement rate [n times per day]
-Sensordata(4,21) = 0; %Voltage at which the sensor operates. [V] 
-Sensordata(5,21) = 0; %Current drawn during measurement. [mA]
-Sensordata(6,21) = 0; %Time it takes to do 1 measurement. [s]
+Sensordata(3,21) = 24; %Default measurement rate [n times per day]
+Sensordata(4,21) = 1.8; %Voltage at which the sensor operates. [V] 
+Sensordata(5,21) = 90 * 10^-3; %Current drawn during measurement. [mA]
+Sensordata(6,21) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,21) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
-Sensordata(8,21) = 0;%current drawn during standby / deepsleep.[mA]
+Sensordata(8,21) = 0.05 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
 disp(Sensordata);
 disp('finished init_sensors');
