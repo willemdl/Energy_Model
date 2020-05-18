@@ -51,6 +51,7 @@ z=0;%This is used to keep track of how often and when measurement takes place.
 % T_Processing is the total time the MCU spends on processing the measured data.
 measurements2 = zeros(100,NoS+2);
 P_Sub = zeros(T_Max/dt, NoS+4);%--- uitleggen hoe werkt en noemen dat Ptot pas aan einde word berekend/toegevoegd.
+E_Tot = zeros(T_Max/dt, 1);
 
 %tltest = zeros(T_Max/dt,1);
 tltest=0;
@@ -61,17 +62,21 @@ end
 P_DS_MCU = S_MCU(3,1)*S_MCU(7,1);%in mW
 P_DS_Com = S_Com(3,1)*S_Com(10,1);%in mW
 
-while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berekenen tot wanneer energie op is.
+while time(k) < T_Max || E_Used < E_Max %nu alleen gebaseerd op tijd, 2e while of iets voor berekenen tot wanneer energie op is.
 
     %------------- "ik doe deze meting en daarvoor had ik x lang in
     %standbay kunnen staan"
     %------------- een functie maken van dt_test 
     %------------- code opruimen en netter inrichten. 
+    %------------- Emax implementeren
+    %------------- dt_vec maken, en dat dan tijd vector aan het einde word
+    %berekend?
     %% Energy usage during sleep
     k = k+1;
     P_Sub(k,1:NoS) = P_DS_S(:);
     P_Sub(k,NoS+1:NoS+2) = [P_DS_MCU P_DS_Com];
     P_Sub(k,NoS+4) = 1;
+    E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
     time(k) = time(k-1) +dt;
     if mod(floor(time(k)),dt_h)==0 %floor rond af naar beneden en zorgt voor integer
         %use biggest stepsize possible
@@ -114,6 +119,7 @@ while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berek
             P_Sub(k,1:NoS) = P_DS_S(:); %all sensors in DS
             P_Sub(k,NoS+1:NoS+2) = [P_WU_MCU P_DS_Com];
             P_Sub(k,NoS+4) = 2;
+            E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
             time(k) = time(k-1) +dt;
         end
         %% Energy usage measurement stage [_M_]
@@ -148,6 +154,7 @@ while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berek
                     P_Sub(k,n) = P_M_S(n); %change the one that has been activated
                     P_Sub(k,NoS+1:NoS+2) = [P_M_MCU P_M_Com]; %Communication module is still in DS
                     P_Sub(k,NoS+4) = 3;
+                    E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
                     time(k) = time(k-1) +dt;
                 end
             end
@@ -155,7 +162,6 @@ while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berek
         %% Energy usage during processing stage [_P_]
         P_P_MCU = S_MCU(3,1)*S_MCU(4,1)*S_MCU(8,1);%(3,1)=V (4,1)=mA/MHz (8,1)=MHz
         P_P_Com = S_Com(3,1)*S_Com(8,1); % Communication module is set in active mode.
-        P_P_tot = P_P_MCU +P_P_Com +sum(P_DS_S(:));
         T_MCU_tot = (T_Processing/32)*S_MCU(8,1) +S_MCU(5,1); % (5,1) is Extra time in active mode. [s]
         
         dt_test = strsplit(num2str(T_MCU_tot),'.'); %https://nl.mathworks.com/matlabcentral/answers/347325-find-the-precision-of-a-value
@@ -170,6 +176,7 @@ while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berek
             P_Sub(k,1:NoS) = P_DS_S(:); %all sensors in DS during processing stage.
             P_Sub(k,NoS+1:NoS+2) = [P_P_MCU P_P_Com]; %Communication module is still in DS
             P_Sub(k,NoS+4) = 4;
+            E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
             time(k) = time(k-1) +dt;
             %tltest(k) = tl;
         end
@@ -185,7 +192,7 @@ while time(k) < T_Max  %nu alleen gebaseerd op tijd, 2e while of iets voor berek
         
         tmeasurement(z,2) = time(k);%saves the times at which the measurement is finished, and thus the measurement started
     end
-    %end
+    E_Used = max(E_Tot);
 end
 %truncate vectors and matrices
 time = [0 ; nonzeros(time(:))];
@@ -194,11 +201,9 @@ P_Sub(:,NoS+3) = sum(P_Sub(:,1:NoS+2),2); %sum horizontally
 P_Sub = [zeros(1,NoS+4); P_Sub(any(P_Sub,2),:)];
 E_Sub = zeros(max(size(P_Sub)),NoS+4);
 for k=2:1:max(size(P_Sub))
-    E_Sub(k,1:NoS+3) = E_Sub(k-1,1:NoS+3) + P_Sub(k,1:NoS+3)*dt;
+    E_Sub(k,1:NoS+3) = E_Sub(k-1,1:NoS+3) + P_Sub(k,1:NoS+3)*(time(k)-time(k-1));
 end
 E_Sub(:,NoS+4) = P_Sub(:,NoS+4); %copy the stage indicator from P_Sub to E_Sub
-
-%E_Sub = [zeros(1,NoS+4); E_Sub(any(E_Sub,2),:)];
 
 measurements3= measurements2( any(measurements2,2), :);%https://nl.mathworks.com/matlabcentral/answers/40018-delete-zeros-rows-and-columns
 
