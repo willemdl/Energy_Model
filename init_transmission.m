@@ -15,6 +15,7 @@ function [Transmission, Transmissionname] = init_transmission()
 
 
 Transmissionname(1,1) = "TESTtrans";
+Transmissionname(1,2) = "testtt";
 Transmission(2,1) = 24; %Default transmission rate. [n times per day]
 Transmission(3,1) = 3; %Voltage at which the transmission system operates. [V]
 Transmission(4,1) = 20; %Current drawn during Tx. [mA]
