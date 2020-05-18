@@ -21,7 +21,10 @@ disp('started init_sensors');
 % 4) power deviation in [%] 
 % mxn m is row, n is column
 
-Sensor = zeros(8,21);
+%Verslag:
+% 1) LED pulses bij Heartrate sensors
+
+Sensor = zeros(8,26);
 %% Sensors[Temperature,Respiratory]
     
 Sensorname(1,1) = "TP117";
@@ -212,6 +215,56 @@ Sensordata(5,21) = 90 * 10^-3; %Current drawn during measurement. [mA]
 Sensordata(6,21) = 60; %Time it takes to do 1 measurement. [s]
 Sensordata(7,21) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 Sensordata(8,21) = 0.05 * 10^-3;%current drawn during standby / deepsleep.[mA]
+
+%NOTE VOOR VERSLAG: Heartrate sensor heeft LEDs die aan en uitgaan in
+%pulses.. LEDs kosten natuurlijk veel meer current (=meer power) en dus in
+%dit model is er vanuit gegaan dat en 1/10de van de meting de LEDs aan
+%staan: dus 3s (MOET BETER NAAR WORDEN GEKEKEN IN VERSLAG)
+
+Sensorname(1,22) = "MAX30101"; %LEDs operate on 5V: the current is increased.
+Sensorname(2,22) = "HeartRate";
+Sensordata(3,22) = 24; %Default measurement rate [n times per day]
+Sensordata(4,22) = 1.8; %Voltage at which the sensor operates. [V] 
+Sensordata(5,22) = 0.6; %Current drawn during measurement. [mA] (!!!)
+Sensordata(6,22) = 30; %Time it takes to do 1 measurement. [s]
+Sensordata(7,22) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
+Sensordata(8,22) = 0.7 * 10^-3;%current drawn during standby / deepsleep.[mA]
+
+Sensorname(1,23) = "MAX30102";
+Sensorname(2,23) = "HeartRate";
+Sensordata(3,23) = 24; %Default measurement rate [n times per day]
+Sensordata(4,23) = 1.8; %Voltage at which the sensor operates. [V] 
+Sensordata(5,23) = 0.6; %Current drawn during measurement. [mA] (!!!)
+Sensordata(6,23) = 30; %Time it takes to do 1 measurement. [s]
+Sensordata(7,23) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
+Sensordata(8,23) = 0.7 * 10^-3;%current drawn during standby / deepsleep.[mA]
+
+Sensorname(1,24) = "MAXM86161";
+Sensorname(2,24) = "HeartRate";
+Sensordata(3,24) = 24; %Default measurement rate [n times per day]
+Sensordata(4,24) = 1.8; %Voltage at which the sensor operates. [V] 
+Sensordata(5,24) = 0.5; %Current drawn during measurement. [mA] (!!!)
+Sensordata(6,24) = 30; %Time it takes to do 1 measurement. [s]
+Sensordata(7,24) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
+Sensordata(8,24) = 1.6 * 10^-3;%current drawn during standby / deepsleep.[mA]
+
+Sensorname(1,25) = "OB1203";
+Sensorname(2,25) = "HeartRate";
+Sensordata(3,25) = 24; %Default measurement rate [n times per day]
+Sensordata(4,25) = 2.65; %Voltage at which the sensor operates. [V] 
+Sensordata(5,25) = 0.5; %Current drawn during measurement. [mA] (!!!)
+Sensordata(6,25) = 30; %Time it takes to do 1 measurement. [s]
+Sensordata(7,25) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
+Sensordata(8,25) = 2 * 10^-3;%current drawn during standby / deepsleep.[mA]
+
+Sensorname(1,26) = "BH1790GLC";
+Sensorname(2,26) = "HeartRate";
+Sensordata(3,26) = 24; %Default measurement rate [n times per day]
+Sensordata(4,26) = 3; %Voltage at which the sensor operates. [V] 
+Sensordata(5,26) = 0.34 * 1.067; %Current drawn during measurement. [mA]
+Sensordata(6,26) = 30; %Time it takes to do 1 measurement. [s]
+Sensordata(7,26) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
+Sensordata(8,26) = 0.8 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
 disp(Sensordata);
 disp('finished init_sensors');
