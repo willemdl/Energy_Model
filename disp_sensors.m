@@ -14,7 +14,7 @@ end
 title('Energy used by sensor per hour for N amount of measurements done per hour')
 xlabel('Number of measurements per hour [N/h]');
 ylabel('Energy consumed per hour [J/h]');
-legend(Sensorname);
+legend(Sensorname(1,:));
 
 disp('finished the disp_sensors function');
 end

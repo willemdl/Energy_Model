@@ -6,7 +6,7 @@ close all
 
 
 %% perform calculations 
-%[Results_calc_sensors, P_s_Measure, P_s_SHDN, E_s_consumed] = calc_sensors(Sensor);
+[Results_calc_sensors, P_s_Measure, P_s_SHDN, E_s_consumed] = calc_sensors(Sensor);
 
 S_Sensors = [Sensor(:,1) Sensor(:,3)];
 S_MCU = MCU(:,1);
@@ -20,11 +20,11 @@ E_Max = 30000;
 % sensors have been defined to be on (1) or off(0) than follows the MCU and 
 % lastly the communication. Make sure the order of sensors is of the same
 % as the matrix S_Sensors.
-[P_Sub, E_Sub, E_Tot, measurements2, time,tmeasurement, tltest] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max);
+%[P_Sub, E_Sub, E_Tot, measurements2, time,tmeasurement, tltest] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max);
 
 
 %% invoke plots and other graphical results
-%disp_sensors(Results_calc_sensors, Sensorname);
-disp_totalenergy(P_Sub, E_Sub, time, tmeasurement);
+disp_sensors(Results_calc_sensors, Sensorname);
+%disp_totalenergy(P_Sub, E_Sub, time, tmeasurement);
 
 
