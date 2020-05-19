@@ -8,8 +8,11 @@ disp('started the disp_sensors function');
 
 N_Max = size(Results,3);
 NoS = size(Results,1);
-
-P_S_M_DS=permute(Results(:,3,:),[1 3 2]); %https://nl.mathworks.com/matlabcentral/answers/409179-how-can-i-extract-the-slices-of-a-3d-matrix-in-x-direction-from-a-3d-matrix
+check = size(Sensorname,2);
+if check ~= NoS
+    error('disp_sensors: number of sensors in Results ~= Sensorname ');
+end
+P_S_M_DS= permute(Results(:,3,:),[1 3 2]); %https://nl.mathworks.com/matlabcentral/answers/409179-how-can-i-extract-the-slices-of-a-3d-matrix-in-x-direction-from-a-3d-matrix
 P_S_M = permute(Results(:,4,:),[1 3 2]);
 
 %% Figure 1 

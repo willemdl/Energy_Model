@@ -3,7 +3,7 @@ disp('started disp_totalenergy');
 
 figure();
 plot(time(:), E_sub(:,end-1));
-title('Energy usage');
+title('Total Energy usage');
 xlabel('Time');
 xlim([0 max(time(:))]);
 ylabel('E [mJ]');
@@ -11,19 +11,12 @@ legend('Energy');
 
 figure();
 plot(time(:), P_Sub(:,end-1));
-title('Power drawn');
-xlabel('Time');
+title('Total Power curve during full simulation');
+xlabel('Time []');
 xlim([0 max(time(:))]);
-ylabel('P [mW]');
+ylabel('Power [mW]');
 legend('Power');
 
-figure();
-plot(time(:), P_Sub(:,end-1));
-title('Power drawn2');
-xlabel('Time');
-xlim([0 max(time(:))]);
-ylabel('P [mW]');
-legend('Power');
 
 
 figure();
@@ -40,7 +33,7 @@ ylabel('Step size [s]');
 %maar ook de combinaties van deze intervallen. als we de tijden kunnen
 %bepalen wanneer deze combinaties voor het eerst plaats vinden dan kunnen
 %we al deze mogelijkheden bijelkaar/naastelkaar plotten. 
-M_Plot = 2;
+M_Plot = 5;
 test = (tmeasurement(M_Plot,2)-tmeasurement(M_Plot,1))/2;
 figure();
 plot(time(:), P_Sub(:,end-1));
@@ -52,7 +45,7 @@ legend('Power');
 disp('finished disp_totalenergy');
 
 figure();
-plot(time(:), P_Sub(:,6));
+plot(time(:), P_Sub(:,end));
 xlim([(tmeasurement(M_Plot,1)-test) (tmeasurement(M_Plot,2)+test)]);
 title('Stages measuremnt1');
 xlabel('Time');
