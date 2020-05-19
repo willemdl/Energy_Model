@@ -20,7 +20,6 @@ disp('started init_sensors');
 % 3) wake up time and current/power drawn during wake up. 
 % 4) power deviation in [%] 
 % mxn m is row, n is column
-Sensorname = zeros(2,26);
 Sensordata = zeros(8,26);
 
 Sensorname(1,1) = "TP117";

@@ -6,7 +6,8 @@ close all
 
 
 %% perform calculations 
-[Results_calc_sensors, P_s_Measure, P_s_SHDN, E_s_consumed] = calc_sensors(Sensor);
+N_Max = 0;
+[Results_calc_sensors, P_s_Measure, P_s_SHDN, E_s_consumed] = calc_sensors(Sensor, N_Max);
 
 S_Sensors = [Sensor(:,1) Sensor(:,3)];
 S_MCU = MCU(:,1);
