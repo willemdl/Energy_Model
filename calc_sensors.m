@@ -26,12 +26,10 @@ T_Total = 24*3600;%Is set to one day, thus energy usage will be calculated for o
 
 
 P_S_Measure = zeros(1, NoS);
-E_S_Measure = zeros(1, NoS);
 P_S_DS = zeros(1, NoS);
 
 for i = 1:NoS
     P_S_Measure(i) = VDD_TYP(i) * IDD_TYP_Measure(i);%mW 
-    E_S_Meaure(i) = P_S_Measure(i)*T_Measurement(i);%mJ
     P_S_DS(i) = VDD_TYP(i) * IDD_TYP_SHDN(i);%mW
 end
 
