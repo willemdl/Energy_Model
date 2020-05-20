@@ -48,7 +48,7 @@ E_Tot = zeros(T_Max/dt, 1);
 tltest=0;
 %% The large loop
 for i=1:1:NoS
-    P_DS_S(1,i) = S_Sensors(2,i)*S_Sensors(6,i);%in mW (2,i)=[V] (6,i)=mA
+    P_DS_S(1,i) = S_Sensors(4,i)*S_Sensors(8,i);%in mW (2,i)=[V] (6,i)=mA
 end
 P_DS_MCU = S_MCU(3,1)*S_MCU(7,1);%in mW
 P_DS_Com = S_Com(3,1)*S_Com(10,1);%in mW
@@ -184,11 +184,12 @@ P_Sub(:,NoS+3) = sum(P_Sub(:,1:NoS+2),2); %sum horizontally to derive total powe
 time = [0 ; nonzeros(time(:))];
 measurements3= measurements2( any(measurements2,2), :);%https://nl.mathworks.com/matlabcentral/answers/40018-delete-zeros-rows-and-columns
 P_Sub = [zeros(1,NoS+4); P_Sub(any(P_Sub,2),:)]; %truncate P_Sub
-E_Sub = zeros(max(size(P_Sub)),NoS+4); %initialize E_Sub with zeros
-for k=2:1:max(size(P_Sub))
-    E_Sub(k,1:NoS+3) = E_Sub(k-1,1:NoS+3) + P_Sub(k,1:NoS+3)*(time(k)-time(k-1));
-end
-E_Sub(:,NoS+4) = P_Sub(:,NoS+4); %copy the stage indicator from P_Sub to E_Sub
+E_Sub = [zeros(1,NoS+4) ; cumsum(P_Sub(2:end,1:end-1).*diff(time)) P_Sub(2:end,NoS+4)];
+% E_Sub = zeros(max(size(P_Sub)),NoS+4); %initialize E_Sub with zeros
+% for k=2:1:max(size(P_Sub))
+%     E_Sub(k,1:NoS+3) = E_Sub(k-1,1:NoS+3) + P_Sub(k,1:NoS+3)*(time(k)-time(k-1));
+% end
+%E_Sub(:,NoS+4) = P_Sub(:,NoS+4); %copy the stage indicator from P_Sub to E_Sub
 
 disp('Finished calc_totalenergy function');
 end

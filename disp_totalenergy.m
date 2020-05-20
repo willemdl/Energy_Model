@@ -63,7 +63,7 @@ legend('Power');
 %% Bar graph of power per stage and power per subdevice
 figure();
 %linker as energy rechter as % van totaal (volledig of voor 1 meting?)
-
+E_Stages = cumsum(P_Sub(2:end,1:end-1).*diff(time));
 
 
 
