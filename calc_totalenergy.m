@@ -60,6 +60,7 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
     %------------- code opruimen en netter inrichten.
     %------------- dt_vec maken, en dat dan tijd vector aan het einde word
     %berekend?
+    %------------- alle vermogens berekeningen buiten de while loop halen
     %% Energy usage during sleep
     k = k+1;
     P_Sub(k,1:NoS) = P_DS_S(:);
@@ -81,11 +82,11 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
     %% Energy usage during activities
     if any(~mod(floor(time(k)),I_Array(:,1))) %gives true if any interval is true
         z=z+1;
-        measurements = I_Array(find(~mod(floor(time(k)),I_Array(:,1))),2:end);%gives an vector of all
+        measurements = I_Array(~mod(floor(time(k)),I_Array(:,1)),2:end);%gives an matrix of all measurements that need to be done.
         measurements2(z,:) = sum(measurements,1);
         tmeasurement(z,1) = time(k);%saves the times at which the if statement was true, and thus the measurement started
         %in order to check this easily
-
+        
         
         
         %% Energy usage during wake up stage [_WU_]
@@ -95,7 +96,7 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
         dt = significants(S_MCU(6,1));
         for tl=0:dt:S_MCU(6,1)
             %tltest(k) = tl;
-
+            
             k = k+1;
             P_Sub(k,1:NoS) = P_DS_S(:); %all sensors in DS
             P_Sub(k,NoS+1:NoS+2) = [P_WU_MCU P_DS_Com];
@@ -149,10 +150,26 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
         %% Energy usage during transmision stage [_Tr_]
         % is leuk als volgorde en hoeveelheid van Tx en Rx ingegeven
         % kan worden.
-        P_Tr_Com = 0;
+        P_Tr_Com(1) = [S_Com(3,1)*S_Com(8,1) S_Com(3,1)*S_Com(4,1) S_Com(3,1)*S_Com(6,1)];%v*mA power in "standard operation", TX,RX
+        T_Tr_Com = [S_Com(9,1) S_Com(5,1) S_Com(7,1)];
         P_Tr_MCU = S_MCU(3,1)*S_MCU(4,1)*S_MCU(8,1);
+        volgorde = [1 2 3];% 1= standard, 2= tx, 3=rx
         %idee: vector maken waarin staat 1) de modus; Tx/Rx of standaard 2) de
         %tijd in die modus
+        for i=1:1:size(volgorde,2)
+            mode = volgorde(i);
+            dt = significants(T_Tr_Com(mode));
+            for tl=0:dt:T_Tr_Com(mode)
+                k = k+1;
+                P_Sub(k,1:NoS) = P_DS_S(:); %all sensors in DS during transmission stage.
+                P_Sub(k,NoS+1:NoS+2) = [P_Tr_MCU P_Tr_Com(mode)];
+                P_Sub(k,NoS+4) = 5 + 0.1*volgorde(i);
+                E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
+                time(k) = time(k-1) +dt;
+                %tltest(k) = tl;
+            end
+        end
+        
         
         %% Energy usage during shutdown stage [_SD_]
         
@@ -164,7 +181,7 @@ P_Sub(:,NoS+3) = sum(P_Sub(:,1:NoS+2),2); %sum horizontally to derive total powe
 
 time = [0 ; nonzeros(time(:))];
 measurements3= measurements2( any(measurements2,2), :);%https://nl.mathworks.com/matlabcentral/answers/40018-delete-zeros-rows-and-columns
-P_Sub = [zeros(1,NoS+4); P_Sub(any(P_Sub,2),:)]; %truncate P_Sub 
+P_Sub = [zeros(1,NoS+4); P_Sub(any(P_Sub,2),:)]; %truncate P_Sub
 E_Sub = zeros(max(size(P_Sub)),NoS+4); %initialize E_Sub with zeros
 for k=2:1:max(size(P_Sub))
     E_Sub(k,1:NoS+3) = E_Sub(k-1,1:NoS+3) + P_Sub(k,1:NoS+3)*(time(k)-time(k-1));
