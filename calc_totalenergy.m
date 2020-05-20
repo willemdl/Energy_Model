@@ -61,6 +61,8 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
     %------------- dt_vec maken, en dat dan tijd vector aan het einde word
     %berekend?
     %------------- alle vermogens berekeningen buiten de while loop halen
+    %------------- significants word nu heel vaak aangeroepen, eventueel
+    %ook buiten de loop halen? vectors/variabelen dt_M_mcu ofzo?
     %% Energy usage during sleep
     k = k+1;
     P_Sub(k,1:NoS) = P_DS_S(:);
@@ -150,10 +152,10 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
         %% Energy usage during transmision stage [_Tr_]
         % is leuk als volgorde en hoeveelheid van Tx en Rx ingegeven
         % kan worden.
-        P_Tr_Com(1) = [S_Com(3,1)*S_Com(8,1) S_Com(3,1)*S_Com(4,1) S_Com(3,1)*S_Com(6,1)];%v*mA power in "standard operation", TX,RX
+        P_Tr_Com = [S_Com(3,1)*S_Com(8,1) S_Com(3,1)*S_Com(4,1) S_Com(3,1)*S_Com(6,1)];%v*mA power in "standard operation", TX,RX
         T_Tr_Com = [S_Com(9,1) S_Com(5,1) S_Com(7,1)];
         P_Tr_MCU = S_MCU(3,1)*S_MCU(4,1)*S_MCU(8,1);
-        volgorde = [1 2 3];% 1= standard, 2= tx, 3=rx
+        volgorde = [1 2 3 2];% 1= standard, 2= tx, 3=rx
         %idee: vector maken waarin staat 1) de modus; Tx/Rx of standaard 2) de
         %tijd in die modus
         for i=1:1:size(volgorde,2)
