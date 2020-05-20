@@ -18,7 +18,7 @@ disp('Started calc_totalenergy function');
 % performed.
 
 %% initialisation of function specific variables
-[~, NoS] = size(S_Sensors); %NoS = Number of Sensors
+NoS = size(S_Sensors,2); %NoS = Number of Sensors
 P_M_S = zeros(NoS); %P_M_ means power during Measurement _S refers to Sensor
 P_DS_S = zeros(1,NoS); %P_S_ means power during Deep Sleep _S refers to Sensor
 
@@ -33,7 +33,7 @@ end
 
 dt=0.1; %used for initialisation of matrices and vectors
 time = zeros(T_Max/dt,1); %vector with the actual time
-tmeasurement = zeros(100,2); %array each row contains in column 1 start time of measurement and 2nd the finished time
+tmeasurement = zeros(100,3); %array each row contains in column 1 start time of measurement, 2nd the finished time, 3rd additional processingtime due to sensors.
 k = 1;%this is the index used for vectors and arrays
 z=0;%This is used to keep track of how often and when measurement takes place.
 % https://matlab.fandom.com/wiki/FAQ#Why_is_0.3_-_0.2_-_0.1_.28or_similar.29_not_equal_to_zero.3F
@@ -48,7 +48,7 @@ E_Tot = zeros(T_Max/dt, 1);
 tltest=0;
 %% The large loop
 for i=1:1:NoS
-    P_DS_S(1,i) = S_Sensors(4,i)*S_Sensors(8,i);%in mW (2,i)=[V] (6,i)=mA
+    P_DS_S(1,i) = S_Sensors(4,i)*S_Sensors(8,i);%in mW (4,i)=[V] (8,i)=mA
 end
 P_DS_MCU = S_MCU(3,1)*S_MCU(7,1);%in mW
 P_DS_Com = S_Com(3,1)*S_Com(10,1);%in mW
@@ -107,7 +107,7 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
             time(k) = time(k-1) +dt;
         end
         %% Energy usage measurement stage [_M_]
-        % S_Sensors(x,1) x=2 -> voltage x=3-> current during measurement
+        % S_Sensors(x,1) x=4 -> voltage x=5-> current during measurement
         % x=5-> time for that measurement
         % It has been assumed that only the MCU and sensor which is
         % being measured are active, all other systemparts(other
@@ -119,14 +119,14 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
             if measurements2(z,n)~=0 %if that sensor needs to be activated
                 P_M_MCU = S_MCU(3,1)*S_MCU(4,1)*S_MCU(8,1);
                 P_M_Com = P_DS_Com; %communication module is still in DS
-                T_Processing = T_Processing + S_Sensors(5,n);% (5,n) -> time[s] to process 1 measurement based on 32MHz
+                T_Processing = T_Processing + S_Sensors(7,n);% (7,n) -> time[s] to process 1 measurement based on 32MHz
                 
-                dt = significants(S_Sensors(4,n));
-                for tl=0:dt:S_Sensors(4,n) % (4,n) time measuring[s]
+                dt = significants(S_Sensors(6,n));
+                for tl=0:dt:S_Sensors(6,n) % (6,n) time measuring[s]
                     %tltest(k) = tl;
                     k = k+1;
                     P_Sub(k,1:NoS) = P_DS_S(:); %all sensors in DS
-                    P_Sub(k,n) = S_Sensors(2,n)*S_Sensors(3,n); %change the one that has been activated
+                    P_Sub(k,n) = S_Sensors(4,n)*S_Sensors(5,n); %change(activate) the one that needs to do the measurement
                     P_Sub(k,NoS+1:NoS+2) = [P_M_MCU P_M_Com]; %Communication module is still in DS
                     P_Sub(k,NoS+4) = 3;
                     E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
@@ -175,7 +175,8 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
         
         %% Energy usage during shutdown stage [_SD_]
         
-        tmeasurement(z,2) = time(k);%saves the times at which the measurement is finished, and thus the measurement started
+        tmeasurement(z,2) = time(k);%saves the times at which the measurement is finished
+        tmeasurement(z,3) = T_Processing; %saves the processing time due to sensors. 
     end
 end
 %truncate vectors and matrices
@@ -184,7 +185,8 @@ P_Sub(:,NoS+3) = sum(P_Sub(:,1:NoS+2),2); %sum horizontally to derive total powe
 time = [0 ; nonzeros(time(:))];
 measurements3= measurements2( any(measurements2,2), :);%https://nl.mathworks.com/matlabcentral/answers/40018-delete-zeros-rows-and-columns
 P_Sub = [zeros(1,NoS+4); P_Sub(any(P_Sub,2),:)]; %truncate P_Sub
-E_Sub = [zeros(1,NoS+4) ; cumsum(P_Sub(2:end,1:end-1).*diff(time)) P_Sub(2:end,NoS+4)];
+Step_Vec = [0 ; diff(time)]; %zero added due to 
+E_Sub = [cumsum(P_Sub(:,1:end-1).*Step_Vec(:)) P_Sub(:, NoS+4)];
 % E_Sub = zeros(max(size(P_Sub)),NoS+4); %initialize E_Sub with zeros
 % for k=2:1:max(size(P_Sub))
 %     E_Sub(k,1:NoS+3) = E_Sub(k-1,1:NoS+3) + P_Sub(k,1:NoS+3)*(time(k)-time(k-1));

@@ -7,7 +7,7 @@ close all
 
 %% perform calculations 
 N_Max = 0;
-%[Results_calc_sensors, P_s_Measure, P_s_SHDN, E_s_consumed] = calc_sensors(Sensor, N_Max);
+[Results_calc_sensors, P_s_Measure, P_s_SHDN, E_s_consumed] = calc_sensors(Sensor, N_Max);
 
 S_Sensors = [Sensor(:,1) Sensor(:,3)];
 S_MCU = MCU(:,1);
@@ -26,6 +26,6 @@ E_Max = 30000;
 
 %% invoke plots and other graphical results
 %disp_sensors(Results_calc_sensors, Sensorname);
-disp_totalenergy(P_Sub, E_Sub, time, tmeasurement);
+disp_totalenergy(P_Sub, E_Sub, time, tmeasurement, S_names);
 
 
