@@ -1,5 +1,4 @@
 function [Sensordata, Sensorname] = init_sensors()
-disp('started init_sensors');
 
 %Implemented as an function because that gives more insight in which
 %parameters are defined and their names compared to a normal matlab script.
@@ -261,6 +260,4 @@ Sensordata(6,26) = 30; %Time it takes to do 1 measurement. [s]
 Sensordata(7,26) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 Sensordata(8,26) = 0.8 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-disp(Sensordata);
-disp('finished init_sensors');
 end

@@ -42,7 +42,6 @@ title('Power drawn measuremnt1');
 xlabel('Time');
 ylabel('P [mW]');
 legend('Power');
-disp('finished disp_totalenergy');
 
 figure();
 plot(time(:), P_Sub(:,end));
