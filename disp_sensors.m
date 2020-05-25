@@ -36,6 +36,7 @@ legend(cellstr(Sensorname(1,:)),'Location','bestoutside');
 figure();
 %https://nl.mathworks.com/help/matlab/ref/plotyy.html
 %https://nl.mathworks.com/matlabcentral/answers/164738-bar-plot-with-two-y-axes
+%Results() needs to be row vector. 
 [AX,H1,H2]=plotyy(1:NoS,[Results(:,2,1) nan(NoS,1)],1:NoS,[nan(NoS,1) Results(:,4,1)],@bar,@bar);
 linkaxes(AX,'x');
 title('Sensor power and energy consumption for one measurement');

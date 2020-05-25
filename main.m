@@ -12,7 +12,7 @@ N_Max = 0;
 S_Sensors = [Sensor(:,1) Sensor(:,3)];
 S_MCU = MCU(:,1);
 S_Com = Transmission(:,1);
-S_names = [Sensorname(1,1) Sensorname(1,3) MCUname(1,1) Transmissionname(1,1)];
+S_names = [Sensorname(1,1) Sensorname(1,3) MCUname(1,1) Transmissionname(1,1) "Total"];
 I_Array = [ (3600) 1 0 1 0; (3*3600) 1 1 1 1];
 T_Max = 3*24*3600;
 E_Max = 30000;
@@ -25,7 +25,9 @@ E_Max = 30000;
 
 
 %% invoke plots and other graphical results
-%disp_sensors(Results_calc_sensors, Sensorname);
+%https://nl.mathworks.com/matlabcentral/answers/102219-how-do-i-make-a-figure-full-screen-programmatically-in-matlab
+set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
 disp_totalenergy(P_Sub, E_Sub, time, tmeasurement, S_names);
-
+%disp_sensors(Results_calc_sensors, Sensorname);
+set(groot, 'defaultFigurePosition', 'factory');
 
