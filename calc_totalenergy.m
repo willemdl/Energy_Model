@@ -1,4 +1,4 @@
-function [ P_Sub, E_Sub, measurements3, time, tmeasurement, tltest] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max)
+function [P_Sub, E_Sub, time, T_m] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max)
 disp('Started calc_totalenergy function');
 %input; one array with the sensors that will be used,
 %one vector with MCU parameters, one vector with transmission parameters.
@@ -33,14 +33,22 @@ end
 
 dt=0.1; %used for initialisation of matrices and vectors
 time = zeros(T_Max/dt,1); %vector with the actual time
-tmeasurement = zeros(100,3); %array each row contains in column 1 start time of measurement, 2nd the finished time, 3rd additional processingtime due to sensors.
+
+%measurements2 = zeros(100,NoS+2);
+T_m = zeros(100,NoS+5); % each row represents an measurement each colum:
+%   (x,1) start time of measurement x
+%   (x,2) time at which measurement x is finished
+%   (x,3) additional processingtime due to sensors for measurement x
+%   (x,4:) contains 1's and 0's if submodule is active or not. (first
+%   sensors then MCU, lastly transmission)
+
 k = 1;%this is the index used for vectors and arrays
 z=0;%This is used to keep track of how often and when measurement takes place.
 % https://matlab.fandom.com/wiki/FAQ#Why_is_0.3_-_0.2_-_0.1_.28or_similar.29_not_equal_to_zero.3F
 % https://nl.mathworks.com/matlabcentral/answers/49910-mod-bug-or-something-else
 
 % T_Processing is the total time the MCU spends on processing the measured data.
-measurements2 = zeros(100,NoS+2);
+
 P_Sub = zeros(T_Max/dt, NoS+4);%--- uitleggen hoe werkt en noemen dat Ptot pas aan einde word berekend/toegevoegd.
 E_Tot = zeros(T_Max/dt, 1);
 
@@ -85,8 +93,8 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
     if any(~mod(floor(time(k)),I_Array(:,1))) %gives true if any interval is true
         z=z+1;
         measurements = I_Array(~mod(floor(time(k)),I_Array(:,1)),2:end);%gives an matrix of all measurements that need to be done.
-        measurements2(z,:) = sum(measurements,1);
-        tmeasurement(z,1) = time(k);%saves the times at which the if statement was true, and thus the measurement started
+        T_m(z,4:end) = sum(measurements,1);
+        T_m(z,1) = time(k);%saves the times at which the if statement was true, and thus the measurement started
         %in order to check this easily
         
         
@@ -113,10 +121,11 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
         % being measured are active, all other systemparts(other
         % sensors and communication module) are in Deep Sleep
         % Additionally each sensor is after the other activated, thus not 2
-        % at the same time.
+        % at the same time. Lastly the order in which the sensors are
+        % activated is same as defined in the S_Sensors array 
         T_Processing = 0; % At each new interval the processing time can be different.
         for n=1:1:NoS %for each sensor
-            if measurements2(z,n)~=0 %if that sensor needs to be activated
+            if T_m(z,3+n)~=0 %if that sensor needs to be activated
                 P_M_MCU = S_MCU(3,1)*S_MCU(4,1)*S_MCU(8,1);
                 P_M_Com = P_DS_Com; %communication module is still in DS
                 T_Processing = T_Processing + S_Sensors(7,n);% (7,n) -> time[s] to process 1 measurement based on 32MHz
@@ -175,23 +184,19 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
         
         %% Energy usage during shutdown stage [_SD_]
         
-        tmeasurement(z,2) = time(k);%saves the times at which the measurement is finished
-        tmeasurement(z,3) = T_Processing; %saves the processing time due to sensors. 
+        T_m(z,2) = time(k);%saves the times at which the measurement is finished
+        T_m(z,3) = T_Processing; %saves the processing time due to sensors. 
     end
 end
 %truncate vectors and matrices
 P_Sub(:,NoS+3) = sum(P_Sub(:,1:NoS+2),2); %sum horizontally to derive total power drawn
 
 time = [0 ; nonzeros(time(:))];
-measurements3= measurements2( any(measurements2,2), :);%https://nl.mathworks.com/matlabcentral/answers/40018-delete-zeros-rows-and-columns
+T_m= T_m( any(T_m,2), :);%https://nl.mathworks.com/matlabcentral/answers/40018-delete-zeros-rows-and-columns
 P_Sub = [zeros(1,NoS+4); P_Sub(any(P_Sub,2),:)]; %truncate P_Sub
 Step_Vec = [0 ; diff(time)]; %zero added due to 
 E_Sub = [cumsum(P_Sub(:,1:end-1).*Step_Vec(:)) P_Sub(:, NoS+4)];
-% E_Sub = zeros(max(size(P_Sub)),NoS+4); %initialize E_Sub with zeros
-% for k=2:1:max(size(P_Sub))
-%     E_Sub(k,1:NoS+3) = E_Sub(k-1,1:NoS+3) + P_Sub(k,1:NoS+3)*(time(k)-time(k-1));
-% end
-%E_Sub(:,NoS+4) = P_Sub(:,NoS+4); %copy the stage indicator from P_Sub to E_Sub
+
 
 disp('Finished calc_totalenergy function');
 end

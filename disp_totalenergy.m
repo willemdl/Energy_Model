@@ -1,4 +1,4 @@
-function [] = disp_totalenergy(P_Sub, E_Sub, time, tmeasurement, names)
+function [] = disp_totalenergy(P_Sub, E_Sub, time, T_m, names)
 disp('started disp_totalenergy');
 
 %% Plot of Total energy, Power and step size vs the time
@@ -35,13 +35,13 @@ ylabel('Step size [s]');
 %bepalen wanneer deze combinaties voor het eerst plaats vinden dan kunnen
 %we al deze mogelijkheden bijelkaar/naastelkaar plotten. 
 M_Plot = 5;
-test = (tmeasurement(M_Plot,2)-tmeasurement(M_Plot,1))/2;
+test = (T_m(M_Plot,2)-T_m(M_Plot,1))/2;
 
 figure();
 sgtitle(['Plot of measurement: ', num2str(M_Plot)])
 subplot(3,1,1)
 plot(time(:), P_Sub(:,end));
-xlim([(tmeasurement(M_Plot,1)-test) (tmeasurement(M_Plot,2)+test)]);
+xlim([(T_m(M_Plot,1)-test) (T_m(M_Plot,2)+test)]);
 title(['Pattern of system Stages during measuremnt:',num2str(M_Plot)]);
 xlabel('Time');
 ylabel('Stage');
@@ -49,7 +49,7 @@ legend('Stages');
 
 subplot(3,1,2)
 plot(time(:), P_Sub(:,end-1));
-xlim([(tmeasurement(M_Plot,1)-test) (tmeasurement(M_Plot,2)+test)]);
+xlim([(T_m(M_Plot,1)-test) (T_m(M_Plot,2)+test)]);
 title(['Pattern of Power drawn during measuremnt:', num2str(M_Plot)]);
 xlabel('Time');
 ylabel('P [mW]');
@@ -57,7 +57,7 @@ legend('Power');
 
 subplot(3,1,3)
 plot(time(:), E_Sub(:,end-1));
-xlim([(tmeasurement(M_Plot,1)-test) (tmeasurement(M_Plot,2)+test)]);
+xlim([(T_m(M_Plot,1)-test) (T_m(M_Plot,2)+test)]);
 title(['Pattern of Energy usage during measuremnt:', num2str(M_Plot)]);
 xlabel('Time');
 ylabel('E [mJ]');

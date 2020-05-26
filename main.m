@@ -21,13 +21,13 @@ E_Max = 30000;
 % sensors have been defined to be on (1) or off(0) than follows the MCU and 
 % lastly the communication. Make sure the order of sensors is of the same
 % as the matrix S_Sensors.
-[P_Sub, E_Sub, measurements2, time,tmeasurement, tltest] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max);
+[P_Sub, E_Sub, time,T_m] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max);
 
 
 %% invoke plots and other graphical results
 %https://nl.mathworks.com/matlabcentral/answers/102219-how-do-i-make-a-figure-full-screen-programmatically-in-matlab
 set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
-disp_totalenergy(P_Sub, E_Sub, time, tmeasurement, S_names);
+disp_totalenergy(P_Sub, E_Sub, time, T_m, S_names);
 disp_sensors(Results_calc_sensors, Sensorname);
 set(groot, 'defaultFigurePosition', 'factory');
 
