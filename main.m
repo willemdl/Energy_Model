@@ -28,6 +28,6 @@ E_Max = 30000;
 %https://nl.mathworks.com/matlabcentral/answers/102219-how-do-i-make-a-figure-full-screen-programmatically-in-matlab
 set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
 disp_totalenergy(P_Sub, E_Sub, time, tmeasurement, S_names);
-%disp_sensors(Results_calc_sensors, Sensorname);
+disp_sensors(Results_calc_sensors, Sensorname);
 set(groot, 'defaultFigurePosition', 'factory');
 
