@@ -1,4 +1,4 @@
-function [P_Sub, E_Sub, time, T_m] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max)
+function [Results_calc_totalenergy, P_Sub, E_Sub, time, T_m] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max)
 disp('Started calc_totalenergy function');
 %input; one array with the sensors that will be used,
 %one vector with MCU parameters, one vector with transmission parameters.
@@ -197,6 +197,10 @@ P_Sub = [zeros(1,NoS+4); P_Sub(any(P_Sub,2),:)]; %truncate P_Sub
 Step_Vec = [0 ; diff(time)]; %zero added due to 
 E_Sub = [cumsum(P_Sub(:,1:end-1).*Step_Vec(:)) P_Sub(:, NoS+4)];
 
+Results_calc_totalenergy.P_Sub = P_Sub;
+Results_calc_totalenergy.E_Sub = E_Sub;
+Results_calc_totalenergy.time = time;
+Results_calc_totalenergy.T_m = T_m;
 
 disp('Finished calc_totalenergy function');
 end

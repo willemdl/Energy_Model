@@ -1,6 +1,8 @@
-function [] = disp_totalenergy(P_Sub, E_Sub, time, T_m, names)
+function disp_totalenergy(P_Sub, E_Sub, time, T_m, names)
 disp('started disp_totalenergy');
-
+set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
+set(0,'DefaultFigureWindowStyle','docked')  % 'normal' to un-dock
+folder = '/Users/Willemdl/Desktop/TU Delft/BAP/Images';
 %% Plot of Total energy, Power and step size vs the time
 Time_Max = max(time);
 
@@ -12,6 +14,7 @@ xlabel('Time');
 xlim([0 Time_Max]);
 ylabel('E [mJ]');
 legend('Energy');
+
 
 subplot(3,1,2);
 plot(time(:), P_Sub(:,end-1));
@@ -28,6 +31,7 @@ title('Step size of totalenergy');
 xlabel('Time');
 xlim([0 Time_Max]);
 ylabel('Step size [s]');
+saveas(gcf, 'Images\totalenergy1', 'svg');
 %% plot of specific measurement with pattern of stages, power and energy 
 %---------- uitzoeken welke combinaties van intervallen mogelijk zijn,
 %stel: intervallen 300 400 en 500 dan heb je deze 3 verschillende metingen
@@ -62,6 +66,7 @@ title(['Pattern of Energy usage during measuremnt:', num2str(M_Plot)]);
 xlabel('Time');
 ylabel('E [mJ]');
 legend('Power');
+saveas(gcf, 'Images\totalenergy2', 'svg');
 %% Extra values that needed to be calculated. 
 %linker as energy rechter as % van totaal (volledig of voor 1 meting?)
 %Step_Vec = [0 ; diff(time)]; %zero added in orderto align the diff vector
@@ -115,6 +120,7 @@ AX(1).YColor = '#0072BD';
 AX(2).YColor = '#D95319';
 AX(2).XColor = 'k';
 xlim([0.5 x+0.5]);
+saveas(gcf, 'Images\totalenergy3', 'svg');
 %% Bar graph Time and Energy in s and mJ per stage
 figure();
 y1 = T_Stages_Tot;
@@ -134,6 +140,7 @@ AX(1).YColor = '#0072BD';
 AX(2).YColor = '#D95319';
 AX(2).XColor = 'k';
 xlim([0.5 x+0.5]);
+saveas(gcf, 'Images\totalenergy4', 'svg');
 %% Bar graph energy and maximum power per component in mJ and mW
 figure();
 NoC = size(P_Sub,2)-2; %Number of Components
@@ -155,10 +162,9 @@ AX(1).YColor = '#0072BD';
 AX(2).YColor = '#D95319';
 AX(2).XColor = 'k';
 xlim([0.5 x+0.5]);
-
-
-disp('finished disp_totalenergy');
+saveas(gcf, 'Images\totalenergy5', 'svg');
 %% Bar graph energy and maximum power per component in [%]
+figure();
 NoC = size(P_Sub,2)-2; %Number of Components
 y1 = E_Sub_Perc;
 y2 = P_Sub_Max_Perc.';
@@ -178,6 +184,8 @@ AX(1).YColor = '#0072BD';
 AX(2).YColor = '#D95319';
 AX(2).XColor = 'k';
 xlim([0.5 x+0.5]);
+saveas(gcf, 'Images\totalenergy6', 'svg');
+
 %% Table of important values EXAMPLE
 %https://nl.mathworks.com/help/matlab/ref/uitable.html
 %https://nl.mathworks.com/help/matlab/ref/matlab.ui.control.table-properties.html
@@ -187,11 +195,13 @@ xlim([0.5 x+0.5]);
 % uitable('ColumnName', colums_str, 'Data', Table_Values);
 
 %% Table of Energy usage and power per stage 
-figure();
+% figure();
+% 
+% colums_str = {'Minimum Power', 'Maximum Power', 'Energy used', 'Time in this stage'};
+% Table_Values = [P_Stages_Min P_Stages_Max E_Stages_Tot T_Stages_Tot];% need to be columns
+% uitable('ColumnName', colums_str, 'Data', Table_Values);
 
-colums_str = {'Minimum Power', 'Maximum Power', 'Energy used', 'Time in this stage'};
-Table_Values = [P_Stages_Min P_Stages_Max E_Stages_Tot T_Stages_Tot];% need to be columns
-uitable('ColumnName', colums_str, 'Data', Table_Values);
 
-
+set(groot, 'defaultFigurePosition', 'factory');
+disp('finished disp_totalenergy');
 end
