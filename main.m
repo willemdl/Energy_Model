@@ -20,7 +20,6 @@ E_Max = 30000;
 % as the matrix S_Sensors.
 [Results_calc_totalenergy, P_Sub, E_Sub, time,T_m] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max);
 
-
 %% invoke plots and other graphical results
 %https://nl.mathworks.com/matlabcentral/answers/102219-how-do-i-make-a-figure-full-screen-programmatically-in-matlab
 set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
