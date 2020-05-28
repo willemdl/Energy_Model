@@ -61,7 +61,7 @@ bar(Results(:,1,1));
 ylabel('Power [mW]');
 title('Power consumption of the sensors in Deep Sleep');
 set(gca, 'XTick', 1:1:NoS,'XTickLabelRotation',45,'xticklabel',cellstr(Sensorname(1,:))); 
-disp('finished the disp_sensors function');
+
 subplot(1,2,2) %------------------ gesorteerd https://stackoverflow.com/questions/22613615/sorting-barh-plots-in-matlab
 [sorted_data, new_indices] = sort(Results(:,1,1)); % sorts in *ascending* order
 sorted_labels = Sensorname(1,new_indices); 

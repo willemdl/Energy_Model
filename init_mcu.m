@@ -1,4 +1,4 @@
-function [MCU, MCUname] = init_mcu()
+function [MCU] = init_mcu()
 %the output of this function should be 1 big matrix, each column is a
 %different MCU, each row is a different parameter. The following
 %parameters need to be defined:
@@ -15,19 +15,27 @@ function [MCU, MCUname] = init_mcu()
 % will be determined by the wake up time, measurement time of sensor(s),
 % total transmission time and some "standard time"(time controller needs to
 % take in order to keep the system in good conditions).
+Parameters = ["Name","Default interval [s]","V_in [V]","I_active [mA/MHz]","T_extra [s]", "T_WakeUp", "I_ds [mA]", "clock freq [MHz]"];
 
-MCU = zeros(7,7);
+MCUdata = zeros(8,8);
 MCUname(1,1)= "TESTMCU";
-MCU(2,1) = 24; %Default measurement rate. [n times per day]
-MCU(3,1) = 3.0; %Voltage at which the microcontroller operates. [V]
-MCU(4,1) = 0.1; %Current drawn when active. [mA/MHz]
-MCU(5,1) = 2; %Extra time in active mode. [s]
-MCU(6,1) = 2; %Wake up time. [s]
-MCU(7,1) = 0.010; %Current drawn during standby / deepsleep.
-MCU(8,1) = 32; %Base clock frequency. [MHz]
+MCUdata(2,1) = 24; %Default measurement rate. [n times per day]
+MCUdata(3,1) = 3.0; %Voltage at which the microcontroller operates. [V]
+MCUdata(4,1) = 0.1; %Current drawn when active. [mA/MHz]
+MCUdata(5,1) = 2; %Extra time in active mode. [s]
+MCUdata(6,1) = 0.0001; %Wake up time. [s]
+MCUdata(7,1) = 0.010; %Current drawn during standby / deepsleep.
+MCUdata(8,1) = 32; %Base clock frequency. [MHz]
 
 
+if size(Parameters,2)~=(size(MCUdata,1)-1+size(MCUname,1))
+    error("init_MCU: parameter names does not correspond to names and data");
+end
+MCUdata = MCUdata(:, any(MCUdata,1));
 
+MCU.Data = MCUdata;
+MCU.Name = MCUname;
+MCU.Parameters = Parameters;
 
 
 

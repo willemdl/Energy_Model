@@ -1,11 +1,58 @@
-function disp_totalenergy(P_Sub, E_Sub, time, T_m, names)
+function disp_totalenergy(Results_totalenergy)
 disp('started disp_totalenergy');
 set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
 set(0,'DefaultFigureWindowStyle','docked')  % 'normal' to un-dock
 folder = '/Users/Willemdl/Desktop/TU Delft/BAP/Images';
-%% Plot of Total energy, Power and step size vs the time
-Time_Max = max(time);
 
+P_Sub = Results_totalenergy.P_Sub;
+E_Sub = Results_totalenergy.E_Sub;
+time = Results_totalenergy.time;
+T_m = Results_totalenergy.T_m;
+names = Results_totalenergy.Name;
+%------------ tabel maken met heleboel berekende waardes. (wat nu grafisch
+%is in een (of meerdere) tabellen zetten.
+
+
+%% Extra values that needed to be calculated. 
+Time_Max = max(time);
+%linker as energy rechter as % van totaal (volledig of voor 1 meting?)
+%Step_Vec = [0 ; diff(time)]; %zero added in orderto align the diff vector
+%with power vector
+%matrix, iedere colom is een stage iedere rij is k
+%waar 1 staat geeft de stage aan voor die k
+%geeft vector x,1 van alle unique stages, floor zorgt er voor dat substages naar hoofdstage word omgezet.
+Stages = unique(floor(P_Sub(2:end,end))); %gives vector containing the stage numbers, neglecting substages
+%K_Stages=logical array; each column is an stage, row is k. if 1 then that 'calculation'(=k) belongs to that specific stage
+K_Stages = floor(P_Sub(:,end))==Stages';
+Step_Stages = K_Stages.*[0;diff(time)]; %gives stepsize at each moment splitted over the stages. (1,x)=stages (x,1)=k
+
+T_Stages_Tot = (sum(Step_Stages,1)).';%gives total time spend in each stage. 
+T_Stages_Perc = (T_Stages_Tot(:) / Time_Max)*100;
+T_Sub_Tot = 0;%gives time spend on each "module", kan maar hiervoor moet veel aangepast worden
+
+P_Sub_Max = max(P_Sub(:,1:end-1),[],1);
+P_Sub_Max_Perc = zeros(1,size(P_Sub_Max,2));
+P_Stages_Tot =K_Stages.*P_Sub(:,end-1); %each column is an stage, row is k
+P_Stages_Max = max(P_Stages_Tot,[],1).';
+P_Stages_Min = min(P_Stages_Tot,[],1).';
+
+
+E_per_k = P_Sub(:,1:end-1).*[0 ; diff(time)];%matrix die de energie geeft per k
+E_Sub_Tot = E_Sub(end,1:end-1);%vector of total energy per component [%]
+E_Sub_Perc = (E_Sub_Tot(:) / E_Sub_Tot(end))*100; %vector of total energy per component [%]
+E_Stages_Tot = (sum(K_Stages.*E_per_k(:,end),1)).';%each row is an stage
+E_Stages_Perc = (E_Stages_Tot(:) / E_Sub_Tot(end))*100;
+
+NoStages = size(Stages,1);%number of stages
+% Stagesnames = strings(1,NoStages);
+% for i =1:1:NoStages
+%     Stagesnames(1,i) = "Stage "+ num2str(i);
+% end
+
+Stagesnames = ["Deep Sleep" "Wake Up" "Measurement" "Processing" "Transmission" ];
+
+
+%% Plot of Total energy, Power and step size vs the time
 figure('Name','geweldige plotjes','NumberTitle','off');
 subplot(3,1,1);
 plot(time(:), E_Sub(:,end-1));
@@ -14,7 +61,6 @@ xlabel('Time');
 xlim([0 Time_Max]);
 ylabel('E [mJ]');
 legend('Energy');
-
 
 subplot(3,1,2);
 plot(time(:), P_Sub(:,end-1));
@@ -67,42 +113,6 @@ xlabel('Time');
 ylabel('E [mJ]');
 legend('Power');
 saveas(gcf, 'Images\totalenergy2', 'svg');
-%% Extra values that needed to be calculated. 
-%linker as energy rechter as % van totaal (volledig of voor 1 meting?)
-%Step_Vec = [0 ; diff(time)]; %zero added in orderto align the diff vector
-%with power vector
-%matrix, iedere colom is een stage iedere rij is k
-%waar 1 staat geeft de stage aan voor die k
-%geeft vector x,1 van alle unique stages, floor zorgt er voor dat substages naar hoofdstage word omgezet.
-Stages = unique(floor(P_Sub(2:end,end))); %gives vector containing the stage numbers, neglecting substages
-%K_Stages=logical array; each column is an stage, row is k. if 1 then that 'calculation'(=k) belongs to that specific stage
-K_Stages = floor(P_Sub(:,end))==Stages';
-Step_Stages = K_Stages.*[0;diff(time)]; %gives stepsize at each moment splitted over the stages. (1,x)=stages (x,1)=k
-
-T_Stages_Tot = (sum(Step_Stages,1)).';%gives total time spend in each stage. 
-T_Stages_Perc = (T_Stages_Tot(:) / Time_Max)*100;
-T_Sub_Tot = 0;%gives time spend on each "module", kan maar hiervoor moet veel aangepast worden
-
-P_Sub_Max = max(P_Sub(:,1:end-1),[],1);
-P_Sub_Max_Perc = zeros(1,size(P_Sub_Max,2));
-P_Stages_Tot =K_Stages.*P_Sub(:,end-1); %each column is an stage, row is k
-P_Stages_Max = max(P_Stages_Tot,[],1).';
-P_Stages_Min = min(P_Stages_Tot,[],1).';
-
-
-E_per_k = P_Sub(:,1:end-1).*[0 ; diff(time)];%matrix die de energie geeft per k
-E_Sub_Tot = E_Sub(end,1:end-1);%vector of total energy per component [%]
-E_Sub_Perc = (E_Sub_Tot(:) / E_Sub_Tot(end))*100; %vector of total energy per component [%]
-E_Stages_Tot = (sum(K_Stages.*E_per_k(:,end),1)).';%each row is an stage
-E_Stages_Perc = (E_Stages_Tot(:) / E_Sub_Tot(end))*100;
-
-NoStages = size(Stages,1);%number of stages
-% Stagesnames = strings(1,NoStages);
-% for i =1:1:NoStages
-%     Stagesnames(1,i) = "Stage "+ num2str(i);
-% end
-
-Stagesnames = ["Deep Sleep" "Wake Up" "Measurement" "Processing" "Transmission" ]
 %% Bar graph of energy and time in [%] per stage
 figure();
 y1 = T_Stages_Perc;
@@ -187,7 +197,6 @@ AX(2).YColor = '#D95319';
 AX(2).XColor = 'k';
 xlim([0.5 x+0.5]);
 saveas(gcf, 'Images\totalenergy6', 'svg');
-
 %% Table of important values EXAMPLE
 %https://nl.mathworks.com/help/matlab/ref/uitable.html
 %https://nl.mathworks.com/help/matlab/ref/matlab.ui.control.table-properties.html
@@ -195,14 +204,13 @@ saveas(gcf, 'Images\totalenergy6', 'svg');
 % colums_str = {'final time', 'Energyused'};
 % Table_Values = [10000 5000; 10 50];
 % uitable('ColumnName', colums_str, 'Data', Table_Values);
-
 %% Table of Energy usage and power per stage 
 % figure();
 % 
 % colums_str = {'Minimum Power', 'Maximum Power', 'Energy used', 'Time in this stage'};
 % Table_Values = [P_Stages_Min P_Stages_Max E_Stages_Tot T_Stages_Tot];% need to be columns
 % uitable('ColumnName', colums_str, 'Data', Table_Values);
-
+stagestable = table(Stagesnames.', T_Stages_Tot, T_Stages_Perc, P_Stages_Max, P_Stages_Min, E_Stages_Tot, E_Stages_Perc);
 
 set(groot, 'defaultFigurePosition', 'factory');
 disp('finished disp_totalenergy');

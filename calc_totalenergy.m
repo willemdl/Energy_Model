@@ -1,4 +1,4 @@
-function [Results_calc_totalenergy, P_Sub, E_Sub, time, T_m] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max)
+function [Results_calc_totalenergy] = calc_totalenergy(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max)
 disp('Started calc_totalenergy function');
 %input; one array with the sensors that will be used,
 %one vector with MCU parameters, one vector with transmission parameters.
@@ -164,17 +164,17 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
         P_Tr_Com = [S_Com(3,1)*S_Com(8,1) S_Com(3,1)*S_Com(4,1) S_Com(3,1)*S_Com(6,1)];%v*mA power in "standard operation", TX,RX
         T_Tr_Com = [S_Com(9,1) S_Com(5,1) S_Com(7,1)];
         P_Tr_MCU = S_MCU(3,1)*S_MCU(4,1)*S_MCU(8,1);
-        volgorde = [1 2 3 2];% 1= standard, 2= tx, 3=rx
+        order = [1 2 3 2];% 1= standard, 2= tx, 3=rx
         %idee: vector maken waarin staat 1) de modus; Tx/Rx of standaard 2) de
         %tijd in die modus
-        for i=1:1:size(volgorde,2)
-            mode = volgorde(i);
+        for i=1:1:size(order,2)
+            mode = order(i);
             dt = significants(T_Tr_Com(mode));
             for tl=0:dt:T_Tr_Com(mode)
                 k = k+1;
                 P_Sub(k,1:NoS) = P_DS_S(:); %all sensors in DS during transmission stage.
                 P_Sub(k,NoS+1:NoS+2) = [P_Tr_MCU P_Tr_Com(mode)];
-                P_Sub(k,NoS+4) = 5 + 0.1*volgorde(i);
+                P_Sub(k,NoS+4) = 5 + 0.1*order(i);
                 E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
                 time(k) = time(k-1) +dt;
                 %tltest(k) = tl;

@@ -1,4 +1,4 @@
-function [Sensordata, Sensorname] = init_sensors()
+function [Sensors] = init_sensors()
 
 %Implemented as an function because that gives more insight in which
 %parameters are defined and their names compared to a normal matlab script.
@@ -13,6 +13,8 @@ function [Sensordata, Sensorname] = init_sensors()
 % 6) Time it takes to do 1 measurement. [s]
 % 7) Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 % 8) current drawn during standby / deepsleep. [mA]
+
+Parameters = ["Name","Type", "Default interval [s]","V_in [V]","I_m [mA]","T_m [s]","T_pr [s]","I_ds [mA]"];
 
 %optionally:
 % 2) accuracy (stel dat je uiteindelijk een (automatisch) overzicht maakt met wat het model aanraad dan kan je dit in dat automatische verslagje meenemen)
@@ -260,4 +262,12 @@ Sensordata(6,26) = 30; %Time it takes to do 1 measurement. [s]
 Sensordata(7,26) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 Sensordata(8,26) = 0.8 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
+if size(Parameters,2)~=(size(Sensordata,1)-2+size(Sensorname,1))
+    error("init_MCU: parameter names does not correspond to names and data");
+end
+
+%Sensordata = Sensordata( :,any(Sensordata,1));
+Sensors.Data = Sensordata;
+Sensors.Name = Sensorname;
+Sensors.Parameters = Parameters; 
 end
