@@ -7,10 +7,13 @@ function disp_totalcomparison()
 %     Results(i) = load(loadfile); 
 % end
 % %tips: 
-% % test = [results.time]; gives all time vectors in columns 
+% % test = [results.time]; gives all time vectors in columns ]
+set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
+set(0,'DefaultFigureWindowStyle','docked')  % 'normal' to un-dock
+
 Results = load('appsave/4testresultaten.mat');
 Results = [Results(:).Results];
-
+filenames = [{'calc1', 'calc2', 'calc3','calc4'}];
 NoR = 4;
 
 
@@ -30,7 +33,7 @@ title('Total Energy usage');
 xlabel('Time [h]');
 xlim([0 Time_Max/3600]);
 ylabel('E [J]');
-legend('Energy');
+legend(filenames);
 
 
 subplot(2,1,2);
@@ -43,7 +46,21 @@ title('Total Power curve during full simulation');
 xlabel('Time [h]');
 xlim([0 Time_Max/3600]);
 ylabel('Power [mW]');
-legend('Power');
+legend(filenames);
 
+%% Figure 2 power van 2e measurement. 
+M_Plot = 2;
+figure('Name','1 measurement comparison','NumberTitle','off');
+for i=1:NoR
+    subplot(NoR, 1,i)
+    test = (Results(i).T_m(M_Plot,2)-Results(i).T_m(M_Plot,1))/2;
+    plot(Results(i).time(:), Results(i).P_Sub(:,end-1));
+    xlim([(Results(i).T_m(M_Plot,1)-test) (Results(i).T_m(M_Plot,2)+test)]);
+    title(['Pattern of Power drawn during measuremnt:', num2str(M_Plot),'of simulation:',filenames(1)]);
+    xlabel('Time');
+    ylabel('P [mW]');
+    legend(filenames(i));   
+end
 
+    
 end

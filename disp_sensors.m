@@ -18,6 +18,7 @@ P_S_M = permute(Results(:,4,:),[1 3 2]);
 %% Figure 1 
 N = linspace(1, N_Max, N_Max);
 figure();
+subplot(1,2,1);
 plot(N, P_S_M);
 title('Energy used by sensor for N amount of measurements done for one day (Exl. DS)')
 xlabel('Number of measurements per day [N/Day]');
@@ -25,7 +26,7 @@ ylabel('Energy consumed per hour [mJ/Day]');
 legend(cellstr(Sensorname(1,:)),'Location','bestoutside');
 
 %% Figure 2
-figure();
+subplot(1,2,2);
 plot(N, P_S_M_DS);
 title('Energy used by sensor for N amount of measurements done per day (Incl. DS)')
 xlabel('Number of measurements per day [N/Day]');
