@@ -27,6 +27,14 @@ MCUdata(6,1) = 0.0001; %Wake up time. [s]
 MCUdata(7,1) = 0.010; %Current drawn during standby / deepsleep.
 MCUdata(8,1) = 32; %Base clock frequency. [MHz]
 
+MCUname(1,2)= "MCUV2";
+MCUdata(2,2) = 24; %Default measurement rate. [n times per day]
+MCUdata(3,2) = 3.0; %Voltage at which the microcontroller operates. [V]
+MCUdata(4,2) = 0.185; %Current drawn when active. [mA/MHz]
+MCUdata(5,2) = 5; %Extra time in active mode. [s]
+MCUdata(6,2) = 0.001; %Wake up time. [s]
+MCUdata(7,2) = 0.001; %Current drawn during standby / deepsleep.
+MCUdata(8,2) = 8; %Base clock frequency. [MHz]
 
 if size(Parameters,2)~=(size(MCUdata,1)-1+size(MCUname,1))
     error("init_MCU: parameter names does not correspond to names and data");

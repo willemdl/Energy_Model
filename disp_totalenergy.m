@@ -54,28 +54,29 @@ Stagesnames = ["Deep Sleep" "Wake Up" "Measurement" "Processing" "Transmission" 
 
 %% Plot of Total energy, Power and step size vs the time
 figure('Name','geweldige plotjes','NumberTitle','off');
+hour = 3600;
 subplot(3,1,1);
-plot(time(:), E_Sub(:,end-1));
+plot(time(:)/hour, E_Sub(:,end-1));
 title('Total Energy usage');
-xlabel('Time');
-xlim([0 Time_Max]);
+xlabel('Time [h]');
+xlim([0 Time_Max/hour]);
 ylabel('E [mJ]');
 legend('Energy');
 
 subplot(3,1,2);
-plot(time(:), P_Sub(:,end-1));
+plot(time(:)/hour, P_Sub(:,end-1));
 title('Total Power curve during full simulation');
 xlabel('Time []');
-xlim([0 Time_Max]);
+xlim([0 Time_Max/hour]);
 ylabel('Power [mW]');
 legend('Power');
 
 subplot(3,1,3);
 %https://nl.mathworks.com/help/physmod/simscape/ug/determine-step-size.html
-semilogy(time(1:end-1),diff(time),'-x'); 
+semilogy(time(1:end-1)/hour,diff(time),'-x'); 
 title('Step size of totalenergy');
 xlabel('Time');
-xlim([0 Time_Max]);
+xlim([0 Time_Max/hour]);
 ylabel('Step size [s]');
 saveas(gcf, 'Images\totalenergy1', 'svg');
 %% plot of specific measurement with pattern of stages, power and energy 
@@ -90,26 +91,26 @@ test = (T_m(M_Plot,2)-T_m(M_Plot,1))/2;
 figure();
 sgtitle(['Plot of measurement: ', num2str(M_Plot)])
 subplot(3,1,1)
-plot(time(:), P_Sub(:,end));
-xlim([(T_m(M_Plot,1)-test) (T_m(M_Plot,2)+test)]);
+plot(time(:)/60, P_Sub(:,end));
+xlim([(T_m(M_Plot,1)-test)/60 (T_m(M_Plot,2)+test)/60]);
 title(['Pattern of system Stages during measuremnt:',num2str(M_Plot)]);
-xlabel('Time');
+xlabel('Time [min]');
 ylabel('Stage');
 legend('Stages');
 
 subplot(3,1,2)
-plot(time(:), P_Sub(:,end-1));
-xlim([(T_m(M_Plot,1)-test) (T_m(M_Plot,2)+test)]);
+plot(time(:)/60, P_Sub(:,end-1));
+xlim([(T_m(M_Plot,1)-test)/60 (T_m(M_Plot,2)+test)/60]);
 title(['Pattern of Power drawn during measuremnt:', num2str(M_Plot)]);
-xlabel('Time');
+xlabel('Time[min]');
 ylabel('P [mW]');
 legend('Power');
 
 subplot(3,1,3)
-plot(time(:), E_Sub(:,end-1));
-xlim([(T_m(M_Plot,1)-test) (T_m(M_Plot,2)+test)]);
+plot(time(:)/60, E_Sub(:,end-1));
+xlim([(T_m(M_Plot,1)-test)/60 (T_m(M_Plot,2)+test)/60]);
 title(['Pattern of Energy usage during measuremnt:', num2str(M_Plot)]);
-xlabel('Time');
+xlabel('Time[min]');
 ylabel('E [mJ]');
 legend('Power');
 saveas(gcf, 'Images\totalenergy2', 'svg');
@@ -184,8 +185,8 @@ x = NoC+1;%+1 because of plotting Total values too.
 [AX,H1,H2]=plotyy(1:x,[y1 nan(x,1)],1:x,[nan(x,1) y2],@bar,@bar);
 linkaxes(AX,'x');
 title('Energy usage and maximum power per Component');
-ylabel(AX(1),'Energy usage [mJ]');
-ylabel(AX(2),'maximum power [mW]');
+ylabel(AX(1),'Energy usage [%]');
+ylabel(AX(2),'maximum power [%]');
 %legend([H1(1) H2(1)],'Deep Sleep','Measuring');
 %https://nl.mathworks.com/help/matlab/ref/matlab.graphics.axis.axes-properties.html
 set(AX, 'XTick', 1:1:x,'XTickLabelRotation',45,'xticklabel',cellstr(names(1,:))); 

@@ -7,13 +7,13 @@ N_Max = 0;
 
 [Results_calc_sensors, P_s_Measure, P_s_SHDN, E_s_consumed] = calc_sensors(Sensors.Data, N_Max);
 
-S_Sensors = [Sensors.Data(:,1) Sensors.Data(:,3)];
-S_MCU = MCU.Data(:,1);
-S_Com = Transmission.Data(:,1);
-S_names = [Sensors.Name(1,1) Sensors.Name(1,3) MCU.Name(1,1) Transmission.Name(1,1) "Total"];
-I_Array = [ (3600) 1 0 1 0; (3*3600) 1 1 1 1];
+S_Sensors = [Sensors.Data(:,2) Sensors.Data(:,21) Sensors.Data(:,27)];
+S_MCU = MCU.Data(:,2);
+S_Com = Transmission.Data(:,2);
+S_names = [Sensors.Name(1,2) Sensors.Name(1,21) Sensors.Name(1,27) MCU.Name(1,2) Transmission.Name(1,2) "Total"];
+I_Array = [ (3600) 1 1 1 1 1];
 T_Max = 3*24*3600;
-E_Max = 30000;
+E_Max = 0;
 %I_Array first column = interval time in [s]
 % second column = sensor 1, third column is sensor 2, etc untill all
 % sensors have been defined to be on (1) or off(0) than follows the MCU and 
@@ -27,6 +27,6 @@ Results_calc_totalenergy.Name = S_names;
 set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
 set(0,'DefaultFigureWindowStyle','docked')  % 'normal' to un-dock
 disp_totalenergy(Results_calc_totalenergy);
-disp_sensors(Results_calc_sensors, Sensors.Name);
+%disp_sensors(Results_calc_sensors, Sensors.Name);
 set(groot, 'defaultFigurePosition', 'factory');
 

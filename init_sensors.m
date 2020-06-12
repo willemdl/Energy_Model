@@ -14,6 +14,15 @@ function [Sensors] = init_sensors()
 % 7) Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 % 8) current drawn during standby / deepsleep. [mA]
 
+classdef SensorsStructure
+    properties
+        Data
+        Name
+        Parameters
+    end
+end
+
+
 Parameters = ["Name","Type", "Default interval [s]","V_in [V]","I_m [mA]","T_m [s]","T_pr [s]","I_ds [mA]"];
 
 %optionally:
@@ -208,7 +217,7 @@ Sensorname(2,21) = "Respiratory";
 Sensordata(3,21) = 24; %Default measurement rate [n times per day]
 Sensordata(4,21) = 1.8; %Voltage at which the sensor operates. [V] 
 Sensordata(5,21) = 90 * 10^-3; %Current drawn during measurement. [mA]
-Sensordata(6,21) = 60; %Time it takes to do 1 measurement. [s]
+Sensordata(6,21) = 30; %Time it takes to do 1 measurement. [s]
 Sensordata(7,21) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 Sensordata(8,21) = 0.05 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
@@ -262,11 +271,22 @@ Sensordata(6,26) = 30; %Time it takes to do 1 measurement. [s]
 Sensordata(7,26) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 Sensordata(8,26) = 0.8 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
+Sensorname(1,27) = "bilitest";
+Sensorname(2,27) = "bilirubine";
+Sensordata(3,27) = 24; %Default measurement rate [n times per day]
+Sensordata(4,27) = 4.5; %Voltage at which the sensor operates. [V] 
+Sensordata(5,27) = 50; %Current drawn during measurement. [mA]
+Sensordata(6,27) = 0.015; %Time it takes to do 1 measurement. [s]
+Sensordata(7,27) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
+Sensordata(8,27) = 0;%current drawn during standby / deepsleep.[mA]
+
 if size(Parameters,2)~=(size(Sensordata,1)-2+size(Sensorname,1))
     error("init_MCU: parameter names does not correspond to names and data");
 end
 
-%Sensordata = Sensordata( :,any(Sensordata,1));
+
+
+Sensors = SensorsStructure;
 Sensors.Data = Sensordata;
 Sensors.Name = Sensorname;
 Sensors.Parameters = Parameters; 

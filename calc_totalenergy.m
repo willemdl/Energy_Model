@@ -96,9 +96,6 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
         T_m(z,4:end) = sum(measurements,1);
         T_m(z,1) = time(k);%saves the times at which the if statement was true, and thus the measurement started
         %in order to check this easily
-        
-        
-        
         %% Energy usage during wake up stage [_WU_]
         % It has been assumed that only the MCU has an wake up stage,
         % the rest remains in Deep Sleep.
@@ -204,49 +201,49 @@ Results_calc_totalenergy.T_m = T_m;
 
 
 %% Extra values that needed to be calculated. 
-Time_Max = max(time);
-%linker as energy rechter as % van totaal (volledig of voor 1 meting?)
-%Step_Vec = [0 ; diff(time)]; %zero added in orderto align the diff vector
-%with power vector
-%matrix, iedere colom is een stage iedere rij is k
-%waar 1 staat geeft de stage aan voor die k
-%geeft vector x,1 van alle unique stages, floor zorgt er voor dat substages naar hoofdstage word omgezet.
-Stages = unique(floor(P_Sub(2:end,end))); %gives vector containing the stage numbers, neglecting substages
-%K_Stages=logical array; each column is an stage, row is k. if 1 then that 'calculation'(=k) belongs to that specific stage
-K_Stages = floor(P_Sub(:,end))==Stages';
-Step_Stages = K_Stages.*[0;diff(time)]; %gives stepsize at each moment splitted over the stages. (1,x)=stages (x,1)=k
-
-T_Stages_Tot = (sum(Step_Stages,1)).';%gives total time spend in each stage. 
-T_Stages_Perc = (T_Stages_Tot(:) / Time_Max)*100;
-T_Sub_Tot = 0;%gives time spend on each "module", kan maar hiervoor moet veel aangepast worden
-
-P_Sub_Max = max(P_Sub(:,1:end-1),[],1);
-P_Sub_Max_Perc = zeros(1,size(P_Sub_Max,2));
-P_Stages_Tot =K_Stages.*P_Sub(:,end-1); %each column is an stage, row is k
-P_Stages_Max = max(P_Stages_Tot,[],1).';
-P_Stages_Min = min(P_Stages_Tot,[],1).';
-
-
-E_per_k = P_Sub(:,1:end-1).*[0 ; diff(time)];%matrix die de energie geeft per k
-E_Sub_Tot = E_Sub(end,1:end-1);%vector of total energy per component [mJ]
-E_Sub_Perc = (E_Sub_Tot(:) / E_Sub_Tot(end))*100; %vector of total energy per component [%]
-E_Stages_Tot = (sum(K_Stages.*E_per_k(:,end),1)).';%each row is an stage
-E_Stages_Perc = (E_Stages_Tot(:) / E_Sub_Tot(end))*100;
-
-NoStages = size(Stages,1);%number of stages
-% Stagesnames = strings(1,NoStages);
-% for i =1:1:NoStages
-%     Stagesnames(1,i) = "Stage "+ num2str(i);
-% end
-%
-%% Stages table
-Stagesnames = ["Deep Sleep" "Wake Up" "Measurement" "Processing" "Transmission" ];
-Results_calc_totalenergy.stagestable = table(Stagesnames.', T_Stages_Tot, T_Stages_Perc, P_Stages_Max, P_Stages_Min, E_Stages_Tot, E_Stages_Perc);
-
-%% module table
-%------- toevoegen hoevaak iedere sensor/module is geactiveerd. E_DS
-%toevoegen
-modulestable = table(,E_Sub_Tot, E_Sub_Perc);
+% Time_Max = max(time);
+% %linker as energy rechter as % van totaal (volledig of voor 1 meting?)
+% %Step_Vec = [0 ; diff(time)]; %zero added in orderto align the diff vector
+% %with power vector
+% %matrix, iedere colom is een stage iedere rij is k
+% %waar 1 staat geeft de stage aan voor die k
+% %geeft vector x,1 van alle unique stages, floor zorgt er voor dat substages naar hoofdstage word omgezet.
+% Stages = unique(floor(P_Sub(2:end,end))); %gives vector containing the stage numbers, neglecting substages
+% %K_Stages=logical array; each column is an stage, row is k. if 1 then that 'calculation'(=k) belongs to that specific stage
+% K_Stages = floor(P_Sub(:,end))==Stages';
+% Step_Stages = K_Stages.*[0;diff(time)]; %gives stepsize at each moment splitted over the stages. (1,x)=stages (x,1)=k
+% 
+% T_Stages_Tot = (sum(Step_Stages,1)).';%gives total time spend in each stage. 
+% T_Stages_Perc = (T_Stages_Tot(:) / Time_Max)*100;
+% T_Sub_Tot = 0;%gives time spend on each "module", kan maar hiervoor moet veel aangepast worden
+% 
+% P_Sub_Max = max(P_Sub(:,1:end-1),[],1);
+% P_Sub_Max_Perc = zeros(1,size(P_Sub_Max,2));
+% P_Stages_Tot =K_Stages.*P_Sub(:,end-1); %each column is an stage, row is k
+% P_Stages_Max = max(P_Stages_Tot,[],1).';
+% P_Stages_Min = min(P_Stages_Tot,[],1).';
+% 
+% 
+% E_per_k = P_Sub(:,1:end-1).*[0 ; diff(time)];%matrix die de energie geeft per k
+% E_Sub_Tot = E_Sub(end,1:end-1);%vector of total energy per component [mJ]
+% E_Sub_Perc = (E_Sub_Tot(:) / E_Sub_Tot(end))*100; %vector of total energy per component [%]
+% E_Stages_Tot = (sum(K_Stages.*E_per_k(:,end),1)).';%each row is an stage
+% E_Stages_Perc = (E_Stages_Tot(:) / E_Sub_Tot(end))*100;
+% 
+% NoStages = size(Stages,1);%number of stages
+% % Stagesnames = strings(1,NoStages);
+% % for i =1:1:NoStages
+% %     Stagesnames(1,i) = "Stage "+ num2str(i);
+% % end
+% %
+% %% Stages table
+% Stagesnames = ["Deep Sleep" "Wake Up" "Measurement" "Processing" "Transmission" ];
+% Results_calc_totalenergy.stagestable = table(Stagesnames.', T_Stages_Tot, T_Stages_Perc, P_Stages_Max, P_Stages_Min, E_Stages_Tot, E_Stages_Perc);
+% 
+% %% module table
+% %------- toevoegen hoevaak iedere sensor/module is geactiveerd. E_DS
+% %toevoegen
+% %modulestable = table(,E_Sub_Tot, E_Sub_Perc);
 
 
 disp('Finished calc_totalenergy function');

@@ -25,6 +25,17 @@ Transmissiondata(8,1) = 2; %Current drawn during other time. [mA]
 Transmissiondata(9,1) = 3; %Time of other "standard" operation. [s]
 Transmissiondata(10,1) = 0.01; %Current drawn during deep sleep. [mA]
 
+Transmissionname(1,2) = "transmissionV2";
+Transmissiondata(2,2) = 24; %Default transmission rate. [n times per day]
+Transmissiondata(3,2) = 3; %Voltage at which the transmission system operates. [V]
+Transmissiondata(4,2) = 7; %Current drawn during Tx. [mA]
+Transmissiondata(5,2) = 0.0015; %Time of Tx. [s]
+Transmissiondata(6,2) = 7; %Current drawn during Rx. [mA]
+Transmissiondata(7,2) = 0.0005; %Time of Rx. [s]
+Transmissiondata(8,2) = 2; %Current drawn during other time. [mA]
+Transmissiondata(9,2) = 0.25; %Time of other "standard" operation. [s]
+Transmissiondata(10,2) = 0.5*10^-3; %Current drawn during deep sleep. [mA]
+
 if size(Parameters,2)~=(size(Transmissiondata,1)-1+size(Transmissionname,1))
     error("init_transmisssion: parameter names does not correspond to names and data");
 end

@@ -22,7 +22,7 @@ for i=1:1:NoR
     Max(i) = max(Results(i).time,[],1); % if one simulation is longer than another the axis will be set to the largest one. 
 end
 Time_Max = max(Max);
-figure('Name','geweldige plotjes','NumberTitle','off');
+figure('Name','comparison1','NumberTitle','off');
 subplot(2,1,1);
 for i=1:NoR
 plot(Results(i).time(:)/3600, Results(i).E_Sub(:,end-1)/1000);
