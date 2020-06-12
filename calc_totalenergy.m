@@ -111,7 +111,7 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
             E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
             time(k) = time(k-1) +dt;
         end
-        %% Energy usage measurement stage [_M_]
+        %% Energy usage during measurement stage [_M_]
         % S_Sensors(x,1) x=4 -> voltage x=5-> current during measurement
         % x=5-> time for that measurement
         % It has been assumed that only the MCU and sensor which is
