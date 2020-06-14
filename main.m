@@ -5,6 +5,7 @@ close all
 %% perform calculations 
 N_Max = 0;
 
+
 [Results_calc_sensors, P_s_Measure, P_s_SHDN, E_s_consumed] = calc_sensors(Sensors.Data, N_Max);
 
 S_Sensors = [Sensors.Data(:,2) Sensors.Data(:,21) Sensors.Data(:,27)];

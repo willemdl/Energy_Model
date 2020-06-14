@@ -6,15 +6,15 @@ folder = '/Users/Willemdl/Desktop/TU Delft/BAP/Images';
 
 P_Sub = Results_totalenergy.P_Sub;
 E_Sub = Results_totalenergy.E_Sub;
-time = Results_totalenergy.time;
+Time = Results_totalenergy.Time;
 T_m = Results_totalenergy.T_m;
-names = Results_totalenergy.Name;
+Names = Results_totalenergy.Name;
 %------------ tabel maken met heleboel berekende waardes. (wat nu grafisch
 %is in een (of meerdere) tabellen zetten.
 
 
 %% Extra values that needed to be calculated. 
-Time_Max = max(time);
+Time_Max = max(Time);
 %linker as energy rechter as % van totaal (volledig of voor 1 meting?)
 %Step_Vec = [0 ; diff(time)]; %zero added in orderto align the diff vector
 %with power vector
@@ -24,7 +24,7 @@ Time_Max = max(time);
 Stages = unique(floor(P_Sub(2:end,end))); %gives vector containing the stage numbers, neglecting substages
 %K_Stages=logical array; each column is an stage, row is k. if 1 then that 'calculation'(=k) belongs to that specific stage
 K_Stages = floor(P_Sub(:,end))==Stages';
-Step_Stages = K_Stages.*[0;diff(time)]; %gives stepsize at each moment splitted over the stages. (1,x)=stages (x,1)=k
+Step_Stages = K_Stages.*[0;diff(Time)]; %gives stepsize at each moment splitted over the stages. (1,x)=stages (x,1)=k
 
 T_Stages_Tot = (sum(Step_Stages,1)).';%gives total time spend in each stage. 
 T_Stages_Perc = (T_Stages_Tot(:) / Time_Max)*100;
@@ -37,7 +37,7 @@ P_Stages_Max = max(P_Stages_Tot,[],1).';
 P_Stages_Min = min(P_Stages_Tot,[],1).';
 
 
-E_per_k = P_Sub(:,1:end-1).*[0 ; diff(time)];%matrix die de energie geeft per k
+E_per_k = P_Sub(:,1:end-1).*[0 ; diff(Time)];%matrix die de energie geeft per k
 E_Sub_Tot = E_Sub(end,1:end-1);%vector of total energy per component [%]
 E_Sub_Perc = (E_Sub_Tot(:) / E_Sub_Tot(end))*100; %vector of total energy per component [%]
 E_Stages_Tot = (sum(K_Stages.*E_per_k(:,end),1)).';%each row is an stage
@@ -56,7 +56,7 @@ Stagesnames = ["Deep Sleep" "Wake Up" "Measurement" "Processing" "Transmission" 
 figure('Name','geweldige plotjes','NumberTitle','off');
 hour = 3600;
 subplot(3,1,1);
-plot(time(:)/hour, E_Sub(:,end-1));
+plot(Time(:)/hour, E_Sub(:,end-1));
 title('Total Energy usage');
 xlabel('Time [h]');
 xlim([0 Time_Max/hour]);
@@ -64,7 +64,7 @@ ylabel('E [mJ]');
 legend('Energy');
 
 subplot(3,1,2);
-plot(time(:)/hour, P_Sub(:,end-1));
+plot(Time(:)/hour, P_Sub(:,end-1));
 title('Total Power curve during full simulation');
 xlabel('Time []');
 xlim([0 Time_Max/hour]);
@@ -73,7 +73,7 @@ legend('Power');
 
 subplot(3,1,3);
 %https://nl.mathworks.com/help/physmod/simscape/ug/determine-step-size.html
-semilogy(time(1:end-1)/hour,diff(time),'-x'); 
+semilogy(Time(1:end-1)/hour,diff(Time),'-x'); 
 title('Step size of totalenergy');
 xlabel('Time');
 xlim([0 Time_Max/hour]);
@@ -91,7 +91,7 @@ test = (T_m(M_Plot,2)-T_m(M_Plot,1))/2;
 figure();
 sgtitle(['Plot of measurement: ', num2str(M_Plot)])
 subplot(3,1,1)
-plot(time(:)/60, P_Sub(:,end));
+plot(Time(:)/60, P_Sub(:,end));
 xlim([(T_m(M_Plot,1)-test)/60 (T_m(M_Plot,2)+test)/60]);
 title(['Pattern of system Stages during measuremnt:',num2str(M_Plot)]);
 xlabel('Time [min]');
@@ -99,7 +99,7 @@ ylabel('Stage');
 legend('Stages');
 
 subplot(3,1,2)
-plot(time(:)/60, P_Sub(:,end-1));
+plot(Time(:)/60, P_Sub(:,end-1));
 xlim([(T_m(M_Plot,1)-test)/60 (T_m(M_Plot,2)+test)/60]);
 title(['Pattern of Power drawn during measuremnt:', num2str(M_Plot)]);
 xlabel('Time[min]');
@@ -107,7 +107,7 @@ ylabel('P [mW]');
 legend('Power');
 
 subplot(3,1,3)
-plot(time(:)/60, E_Sub(:,end-1));
+plot(Time(:)/60, E_Sub(:,end-1));
 xlim([(T_m(M_Plot,1)-test)/60 (T_m(M_Plot,2)+test)/60]);
 title(['Pattern of Energy usage during measuremnt:', num2str(M_Plot)]);
 xlabel('Time[min]');
@@ -167,7 +167,7 @@ ylabel(AX(1),'Energy usage [mJ]');
 ylabel(AX(2),'maximum power [mW]');
 %legend([H1(1) H2(1)],'Deep Sleep','Measuring');
 %https://nl.mathworks.com/help/matlab/ref/matlab.graphics.axis.axes-properties.html
-set(AX, 'XTick', 1:1:x,'XTickLabelRotation',45,'xticklabel',cellstr(names(1,:))); 
+set(AX, 'XTick', 1:1:x,'XTickLabelRotation',45,'xticklabel',cellstr(Names(1,:))); 
 set(AX, 'XGrid', 'on', 'YGrid', 'on');
 set(H1,'FaceColor','#0072BD')
 set(H2,'FaceColor','#D95319') 
@@ -189,7 +189,7 @@ ylabel(AX(1),'Energy usage [%]');
 ylabel(AX(2),'maximum power [%]');
 %legend([H1(1) H2(1)],'Deep Sleep','Measuring');
 %https://nl.mathworks.com/help/matlab/ref/matlab.graphics.axis.axes-properties.html
-set(AX, 'XTick', 1:1:x,'XTickLabelRotation',45,'xticklabel',cellstr(names(1,:))); 
+set(AX, 'XTick', 1:1:x,'XTickLabelRotation',45,'xticklabel',cellstr(Names(1,:))); 
 set(AX, 'XGrid', 'on', 'YGrid', 'on');
 set(H1,'FaceColor','#0072BD')
 set(H2,'FaceColor','#D95319') 

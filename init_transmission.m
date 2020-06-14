@@ -41,6 +41,8 @@ if size(Parameters,2)~=(size(Transmissiondata,1)-1+size(Transmissionname,1))
 end
 
 Transmissiondata = Transmissiondata(:, any(Transmissiondata,1));
+
+Transmission = TransmissionClass;%class defined in Classes folder
 Transmission.Data = Transmissiondata;
 Transmission.Name = Transmissionname;
 Transmission.Parameters = Parameters; 

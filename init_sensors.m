@@ -14,9 +14,6 @@ function [Sensors] = init_sensors()
 % 7) Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 % 8) current drawn during standby / deepsleep. [mA]
 
-
-
-
 Parameters = ["Name","Type", "Default interval [s]","V_in [V]","I_m [mA]","T_m [s]","T_pr [s]","I_ds [mA]"];
 
 %optionally:
@@ -280,7 +277,7 @@ end
 
 
 
-Sensors = SensorsClass;
+Sensors = SensorsClass;%class defined in Classes folder
 Sensors.Data = Sensordata;
 Sensors.Name = Sensorname;
 Sensors.Parameters = Parameters; 

@@ -32,7 +32,7 @@ while (mod(I_Step_Max(:,1),10)==0)
 end
 
 dt=0.1; %used for initialisation of matrices and vectors
-time = zeros(T_Max/dt,1); %vector with the actual time
+Time = zeros(T_Max/dt,1); %vector with the actual time
 
 %measurements2 = zeros(100,NoS+2);
 T_m = zeros(100,NoS+5); % each row represents an measurement each colum:
@@ -61,7 +61,7 @@ end
 P_DS_MCU = S_MCU(3,1)*S_MCU(7,1);%in mW
 P_DS_Com = S_Com(3,1)*S_Com(10,1);%in mW
 
-while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e while of iets voor berekenen tot wanneer energie op is.
+while Time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e while of iets voor berekenen tot wanneer energie op is.
     
     %------------- "ik doe deze meting en daarvoor had ik x lang in
     %standbay kunnen staan"
@@ -77,24 +77,24 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
     P_Sub(k,NoS+1:NoS+2) = [P_DS_MCU P_DS_Com];
     P_Sub(k,NoS+4) = 1;
     E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
-    time(k) = time(k-1) +dt;
-    if mod(floor(time(k)),Step_Max)==0 %floor rond af naar beneden en zorgt voor integer
+    Time(k) = Time(k-1) +dt;
+    if mod(floor(Time(k)),Step_Max)==0 %floor rond af naar beneden en zorgt voor integer
         %use biggest stepsize possible
         dt=Step_Max;
-    elseif Step_Max >=100 && mod(floor(time(k)), 10 )==0 %
+    elseif Step_Max >=100 && mod(floor(Time(k)), 10 )==0 %
         dt= 10;
-    elseif Step_Max >=10 && mod(floor(time(k)), 1)==0
+    elseif Step_Max >=10 && mod(floor(Time(k)), 1)==0
         dt= 1;
     else
         dt = 1;
     end
     
     %% Energy usage during activities
-    if any(~mod(floor(time(k)),I_Array(:,1))) %gives true if any interval is true
+    if any(~mod(floor(Time(k)),I_Array(:,1))) %gives true if any interval is true
         z=z+1;
-        measurements = I_Array(~mod(floor(time(k)),I_Array(:,1)),2:end);%gives an matrix of all measurements that need to be done.
+        measurements = I_Array(~mod(floor(Time(k)),I_Array(:,1)),2:end);%gives an matrix of all measurements that need to be done.
         T_m(z,4:end) = sum(measurements,1);
-        T_m(z,1) = time(k);%saves the times at which the if statement was true, and thus the measurement started
+        T_m(z,1) = Time(k);%saves the times at which the if statement was true, and thus the measurement started
         %in order to check this easily
         %% Energy usage during wake up stage [_WU_]
         % It has been assumed that only the MCU has an wake up stage,
@@ -109,7 +109,7 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
             P_Sub(k,NoS+1:NoS+2) = [P_WU_MCU P_DS_Com];
             P_Sub(k,NoS+4) = 2;
             E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
-            time(k) = time(k-1) +dt;
+            Time(k) = Time(k-1) +dt;
         end
         %% Energy usage during measurement stage [_M_]
         % S_Sensors(x,1) x=4 -> voltage x=5-> current during measurement
@@ -134,15 +134,16 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
                     P_Sub(k,1:NoS) = P_DS_S(:); %all sensors in DS
                     P_Sub(k,n) = S_Sensors(4,n)*S_Sensors(5,n); %change(activate) the one that needs to do the measurement
                     P_Sub(k,NoS+1:NoS+2) = [P_M_MCU P_M_Com]; %Communication module is still in DS
-                    P_Sub(k,NoS+4) = 3;
+                    P_Sub(k,NoS+4) = 3+0.1*n;
                     E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
-                    time(k) = time(k-1) +dt;
+                    Time(k) = Time(k-1) +dt;
                 end
             end
         end
         %% Energy usage during processing stage [_P_]
         P_P_MCU = S_MCU(3,1)*S_MCU(4,1)*S_MCU(8,1);%(3,1)=V (4,1)=mA/MHz (8,1)=MHz
-        P_P_Com = S_Com(3,1)*S_Com(8,1); % Communication module is set in active mode.
+        P_P_Com = P_DS_Com; %Communication module in Deep Sleep
+        %P_P_Com = S_Com(3,1)*S_Com(8,1); % Communication module is set in active mode.
         T_MCU_Tot = (T_Processing/32)*S_MCU(8,1) +S_MCU(5,1); % (5,1) is Extra time in active mode. [s]
         
         dt = significants(T_MCU_Tot);
@@ -152,7 +153,7 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
             P_Sub(k,NoS+1:NoS+2) = [P_P_MCU P_P_Com]; %Communication module is still in DS
             P_Sub(k,NoS+4) = 4;
             E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
-            time(k) = time(k-1) +dt;
+            Time(k) = Time(k-1) +dt;
             %tltest(k) = tl;
         end
         %% Energy usage during transmision stage [_Tr_]
@@ -173,7 +174,7 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
                 P_Sub(k,NoS+1:NoS+2) = [P_Tr_MCU P_Tr_Com(mode)];
                 P_Sub(k,NoS+4) = 5 + 0.1*order(i);
                 E_Tot(k) = E_Tot(k-1)+sum(P_Sub(k,1:NoS+2))*dt;
-                time(k) = time(k-1) +dt;
+                Time(k) = Time(k-1) +dt;
                 %tltest(k) = tl;
             end
         end
@@ -181,22 +182,23 @@ while time(k) < T_Max || E_Tot(k) <= E_Max %nu alleen gebaseerd op tijd, 2e whil
         
         %% Energy usage during shutdown stage [_SD_]
         
-        T_m(z,2) = time(k);%saves the times at which the measurement is finished
+        T_m(z,2) = Time(k);%saves the times at which the measurement is finished
         T_m(z,3) = T_Processing; %saves the processing time due to sensors. 
     end
 end
 %truncate vectors and matrices
 P_Sub(:,NoS+3) = sum(P_Sub(:,1:NoS+2),2); %sum horizontally to derive total power drawn
 
-time = [0 ; nonzeros(time(:))];
+Time = [0 ; nonzeros(Time(:))];
 T_m= T_m( any(T_m,2), :);%https://nl.mathworks.com/matlabcentral/answers/40018-delete-zeros-rows-and-columns
 P_Sub = [zeros(1,NoS+4); P_Sub(any(P_Sub,2),:)]; %truncate P_Sub
-Step_Vec = [0 ; diff(time)]; %zero added due to 
+Step_Vec = [0 ; diff(Time)]; %zero added due to 
 E_Sub = [cumsum(P_Sub(:,1:end-1).*Step_Vec(:)) P_Sub(:, NoS+4)];
+
 
 Results_calc_totalenergy.P_Sub = P_Sub;
 Results_calc_totalenergy.E_Sub = E_Sub;
-Results_calc_totalenergy.time = time;
+Results_calc_totalenergy.Time = Time;
 Results_calc_totalenergy.T_m = T_m;
 
 

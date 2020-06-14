@@ -100,14 +100,14 @@
     ><line y2="581" style="fill:none;" x1="166.5" x2="1158.5" y1="581"
     /></g
     ><g style="fill:rgb(0,114,189); text-rendering:optimizeSpeed; color-rendering:optimizeSpeed; image-rendering:optimizeSpeed; shape-rendering:crispEdges; stroke:rgb(0,114,189); color-interpolation:sRGB;"
-    ><path style="stroke:none;" d="M244.4429 581 L244.4429 579.5128 L206.6524 579.5128 L206.6524 581 ZM409.7762 581 L409.7762 568.0981 L371.9857 568.0981 L371.9857 581 ZM575.1096 581 L575.1096 572.056 L537.319 572.056 L537.319 581 ZM740.4429 581 L740.4429 164.3038 L702.6524 164.3038 L702.6524 581 ZM905.7762 581 L905.7762 489.0294 L867.9857 489.0294 L867.9857 581 ZM1071.1095 581 L1071.1095 49 L1033.319 49 L1033.319 581 Z"
+    ><path style="stroke:none;" d="M244.4429 581 L244.4429 577.9812 L206.6524 577.9812 L206.6524 581 ZM409.7762 581 L409.7762 554.8112 L371.9857 554.8112 L371.9857 581 ZM575.1096 581 L575.1096 562.8452 L537.319 562.8452 L537.319 581 ZM740.4429 581 L740.4429 131.4928 L702.6524 131.4928 L702.6524 581 ZM905.7762 581 L905.7762 545.8696 L867.9857 545.8696 L867.9857 581 ZM1071.1095 581 L1071.1095 49 L1033.319 49 L1033.319 581 Z"
     /></g
     ><g style="text-rendering:geometricPrecision; stroke-width:0.5; color-interpolation:linearRGB; color-rendering:optimizeQuality; stroke-linecap:butt; image-rendering:optimizeQuality;"
-    ><path d="M206.6524 581 L206.6524 579.5128 L244.4429 579.5128 L244.4429 581 Z" style="fill:none; fill-rule:evenodd;"
-      /><path d="M371.9857 581 L371.9857 568.0981 L409.7762 568.0981 L409.7762 581 Z" style="fill:none; fill-rule:evenodd;"
-      /><path d="M537.319 581 L537.319 572.056 L575.1096 572.056 L575.1096 581 Z" style="fill:none; fill-rule:evenodd;"
-      /><path d="M702.6524 581 L702.6524 164.3038 L740.4429 164.3038 L740.4429 581 Z" style="fill:none; fill-rule:evenodd;"
-      /><path d="M867.9857 581 L867.9857 489.0294 L905.7762 489.0294 L905.7762 581 Z" style="fill:none; fill-rule:evenodd;"
+    ><path d="M206.6524 581 L206.6524 577.9812 L244.4429 577.9812 L244.4429 581 Z" style="fill:none; fill-rule:evenodd;"
+      /><path d="M371.9857 581 L371.9857 554.8112 L409.7762 554.8112 L409.7762 581 Z" style="fill:none; fill-rule:evenodd;"
+      /><path d="M537.319 581 L537.319 562.8452 L575.1096 562.8452 L575.1096 581 Z" style="fill:none; fill-rule:evenodd;"
+      /><path d="M702.6524 581 L702.6524 131.4928 L740.4429 131.4928 L740.4429 581 Z" style="fill:none; fill-rule:evenodd;"
+      /><path d="M867.9857 581 L867.9857 545.8696 L905.7762 545.8696 L905.7762 581 Z" style="fill:none; fill-rule:evenodd;"
       /><path d="M1033.319 581 L1033.319 49 L1071.1095 49 L1071.1095 581 Z" style="fill:none; fill-rule:evenodd;"
     /></g
     ><g style="fill:rgb(38,38,38); text-rendering:geometricPrecision; image-rendering:optimizeQuality; color-rendering:optimizeQuality; stroke-linejoin:round; stroke:rgb(38,38,38); color-interpolation:linearRGB; stroke-width:0.5;"
