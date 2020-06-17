@@ -25,7 +25,7 @@ Transmissiondata(8,1) = 2; %Current drawn during other time. [mA]
 Transmissiondata(9,1) = 3; %Time of other "standard" operation. [s]
 Transmissiondata(10,1) = 0.01; %Current drawn during deep sleep. [mA]
 
-Transmissionname(1,2) = "transmissionV2";
+Transmissionname(1,2) = "nRF52810";
 Transmissiondata(2,2) = 24; %Default transmission rate. [n times per day]
 Transmissiondata(3,2) = 3; %Voltage at which the transmission system operates. [V]
 Transmissiondata(4,2) = 7; %Current drawn during Tx. [mA]

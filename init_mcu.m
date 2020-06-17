@@ -27,7 +27,7 @@ MCUdata(6,1) = 0.0001; %Wake up time. [s]
 MCUdata(7,1) = 0.010; %Current drawn during standby / deepsleep.
 MCUdata(8,1) = 32; %Base clock frequency. [MHz]
 
-MCUname(1,2)= "MCUV2";
+MCUname(1,2)= "MSP430FR5994";
 MCUdata(2,2) = 24; %Default measurement rate. [n times per day]
 MCUdata(3,2) = 3.0; %Voltage at which the microcontroller operates. [V]
 MCUdata(4,2) = 0.185; %Current drawn when active. [mA/MHz]

@@ -262,12 +262,12 @@ Sensordata(6,26) = 30; %Time it takes to do 1 measurement. [s]
 Sensordata(7,26) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 Sensordata(8,26) = 0.8 * 10^-3;%current drawn during standby / deepsleep.[mA]
 
-Sensorname(1,27) = "bilitest";
-Sensorname(2,27) = "bilirubine";
+Sensorname(1,27) = "Bilirubin";
+Sensorname(2,27) = "bilirubin";
 Sensordata(3,27) = 24; %Default measurement rate [n times per day]
-Sensordata(4,27) = 4.5; %Voltage at which the sensor operates. [V] 
-Sensordata(5,27) = 50; %Current drawn during measurement. [mA]
-Sensordata(6,27) = 0.015; %Time it takes to do 1 measurement. [s]
+Sensordata(4,27) = 3.7; %Voltage at which the sensor operates. [V] 
+Sensordata(5,27) = 45; %Current drawn during measurement. [mA]
+Sensordata(6,27) = 3; %Time it takes to do 1 measurement. [s]
 Sensordata(7,27) = 0.001; %Time to process/change data of 1 measurement based on a clock frequency of 32Mhz.[s] 
 Sensordata(8,27) = 0;%current drawn during standby / deepsleep.[mA]
 
