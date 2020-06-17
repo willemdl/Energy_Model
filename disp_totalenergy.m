@@ -3,7 +3,7 @@ disp('started disp_totalenergy');
 set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
 set(0,'DefaultFigureWindowStyle','docked')  % 'normal' to un-dock
 folder = '/Users/Willemdl/Desktop/TU Delft/BAP/Images';
-Save = false;
+Save = true;
 P_Sub = Results_totalenergy.P_Sub;
 E_Sub = Results_totalenergy.E_Sub;
 Time = Results_totalenergy.Time;
@@ -93,7 +93,7 @@ ylabel('E [J]');
 legend('Energy');
 grid on;
 if Save
-    saveas(gcf, 'Images\totalenergyusage', 'svg');
+    saveas(gcf, 'Latexplots\totalenergyusage', 'svg');
 end
 figure();
 %subplot(3,1,2);
@@ -105,7 +105,7 @@ ylabel('Power [mW]');
 legend('Power');
 grid on;
 if Save
-    saveas(gcf, 'Images\totalpowercurve', 'svg');
+    saveas(gcf, 'Latexplots\totalpowercurve', 'svg');
 end
 
 figure();
@@ -119,7 +119,7 @@ ylabel('Step size [s]');
 grid on;
 
 if Save
-    saveas(gcf, 'Images\totalstepsize', 'svg');
+    saveas(gcf, 'Latexplots\totalstepsize', 'svg');
 end
 %% plot of specific measurement with pattern of stages, power and energy
 %---------- uitzoeken welke combinaties van intervallen mogelijk zijn,
@@ -159,7 +159,7 @@ ylabel('E [J]');
 legend('Power');
 grid on;
 if Save
-    saveas(gcf, 'Images\total1measurement', 'svg');
+    saveas(gcf, 'Latexplots\total1measurement', 'svg');
 end
 %% Bar graph of energy and time in [%] per stage
 figure();
@@ -192,7 +192,7 @@ labels2 = string(round(H2(2).YData,2));
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
     'VerticalAlignment','bottom','parent',AX(2));
 if Save
-    saveas(gcf, 'Images\TimeEnergyBarStagePercentage', 'svg');
+    saveas(gcf, 'Latexplots\TimeEnergyBarStagePercentage', 'svg');
 end
 %% Bar graph Time and Energy in s and mJ per stage
 figure();
@@ -225,7 +225,7 @@ labels2 = string(round(H2(2).YData,2));
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
     'VerticalAlignment','bottom','parent',AX(2));
 if Save
-    saveas(gcf, 'Images\totalTimeEnergyBarStage', 'svg');
+    saveas(gcf, 'Latexplots\totalTimeEnergyBarStage', 'svg');
 end
 %% Bar graph Time and Power in s and mW per stage
 figure();
@@ -262,7 +262,7 @@ labels3 = string(round(H2(3).YData,4));
 text(xtips3,ytips3,labels3,'HorizontalAlignment','center',...
     'VerticalAlignment','bottom','parent',AX(2));
 if Save
-    saveas(gcf, 'Images\totalTimePowerBarStage', 'svg');
+    saveas(gcf, 'Latexplots\totalTimePowerBarStage', 'svg');
 end
 %% Bar graph energy and maximum power per component in mJ and mW
 figure();
@@ -295,7 +295,7 @@ labels2 = string(round(H2(2).YData,2));
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
     'VerticalAlignment','bottom','parent',AX(2));
 if Save
-    saveas(gcf, 'Images\totalEnergyPowerBarComponent', 'svg');
+    saveas(gcf, 'Latexplots\totalEnergyPowerBarComponent', 'svg');
 end
 %% Bar graph energy and maximum power per component in [%]
 figure();
@@ -329,7 +329,7 @@ labels2 = string(round(H2(2).YData,2));
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
     'VerticalAlignment','bottom','parent',AX(2));
 if Save
-    saveas(gcf, 'Images\totalEnergyPowerBarComponentPercentage', 'svg');
+    saveas(gcf, 'Latexplots\totalEnergyPowerBarComponentPercentage', 'svg');
 end
 %% 
 Names1 = [Names "losses"];
@@ -343,7 +343,7 @@ title('Bargraph of energy consumed per component');
 xlabel('Components');
 ylabel('Energy [J]')
 if Save
-    saveas(gcf, 'Images\totalEnergyBarComponentstacked', 'svg');
+    saveas(gcf, 'Latexplots\totalEnergyBarComponentstacked', 'svg');
 end
 
 %% 
@@ -361,7 +361,7 @@ title('Bargraph of energy consumed per stage');
 xlabel('Stages');
 ylabel('Energy [J]')
 if Save
-    saveas(gcf, 'Images\totalEnergyBarStagestacked', 'svg');
+    saveas(gcf, 'Latexplots\totalEnergyBarStagestacked', 'svg');
 end
 %% 
 figure();
@@ -373,7 +373,7 @@ title('Bargraph of maximum power per component');
 xlabel('Components');
 ylabel('Power [mW]')
 if Save
-    saveas(gcf, 'Images\totalPowerComponents', 'svg');
+    saveas(gcf, 'Latexplots\totalPowerComponents', 'svg');
 end
 
 %% Table of important values EXAMPLE

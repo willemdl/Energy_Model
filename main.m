@@ -28,8 +28,9 @@ Results_calc_totalenergy.Name = S_names;
 %% invoke plots and other graphical results
 %https://nl.mathworks.com/matlabcentral/answers/102219-how-do-i-make-a-figure-full-screen-programmatically-in-matlab
 %set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
+set(groot, 'defaultFigurePosition', 'factory');
 set(0,'DefaultFigureWindowStyle','docked')  % 'normal' to un-dock
 disp_totalenergy(Results_calc_totalenergy);
 %disp_sensors(Results_calc_sensors, Sensors.Name);
-%set(groot, 'defaultFigurePosition', 'factory');
+
 
