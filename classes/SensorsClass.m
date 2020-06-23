@@ -1,7 +1,7 @@
 classdef SensorsClass
     properties
         Data
-        Name
+        Name = strings;
         Parameters
     end
 end

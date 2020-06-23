@@ -1,13 +1,25 @@
 function [Results_calc_totalenergy] = calc_fullsystem(S_Sensors, S_MCU, S_Com, I_Array, T_Max, E_Max)
 disp('Started calc_totalenergy function');
-%input; one array with the sensors that will be used,
-%one vector with MCU parameters, one vector with transmission parameters.
-%One array with the
 
-%output; 2 vectors/arrays 1 with energy in mili Joule [mJ] and one with the time. seperate time
-%vectors will be outputed in order to easily plot and use the energy data.
-%energy array; each column is one energy calculation and each row is the
-%amount of energy at each time. colums; [allSensors MCU Communication Total Stagenumber]
+
+
+
+
+%DEPRICATED - intention was to implement matrix calculations instead of
+% all the smaller for loops. Not implemented because of lack of time.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %% General information about this function
 % The values for power variables are in mW and thus energy is in mJ
@@ -55,6 +67,9 @@ E_Tot = zeros(T_Max/dt, 1);
 P_Sub2 = zeros(T_Max/dt, NoS+4);
 %tltest = zeros(T_Max/dt,1);
 %tltest=0;
+
+%DEPRICATED - intention was to implement matrix calculations instead of
+% all the smaller for loops. Not implemented because of lack of time.
 %% Define the power consumption of each component per stage
 %Deep sleep stage power consumptions
 for i=1:1:NoS
@@ -93,6 +108,12 @@ Tr_order = [1 2 3 2];% Vector which describes in what order TX and RX takes plac
 %in addition faults can be simulated(e.g. multiple TX or RX). 1= standard, 2= tx, 3=rx
 %idee: matrix maken waarin staat 1) de modus; Tx/Rx of standaard 2) de
 %tijd in die modus
+
+
+
+
+%DEPRICATED - intention was to implement matrix calculations instead of
+% all the smaller for loops. Not implemented because of lack of time.
 %% The large loop
 while Time(k) < T_Max || E_Tot(k) <= E_Max
     

@@ -4,7 +4,7 @@ function [Transmission] = init_transmission()
 %parameters need to be defined:
 % 1) The name of the transmission method.
 % 2) default transmission rate. [n times per day]
-% 3) Voltage at which the transmission system operates. [V]
+% 3) Voltage at which the transmission module operates. [V]
 % 4) Current drawn during Tx. [mA]
 % 5) Time of Tx. [s]
 % 6) Current drawn during Rx. [mA]
@@ -32,7 +32,7 @@ Transmissiondata(4,2) = 7; %Current drawn during Tx. [mA]
 Transmissiondata(5,2) = 0.0015; %Time of Tx. [s]
 Transmissiondata(6,2) = 7; %Current drawn during Rx. [mA]
 Transmissiondata(7,2) = 0.0005; %Time of Rx. [s]
-Transmissiondata(8,2) = 2; %Current drawn during other time. [mA]
+Transmissiondata(8,2) = 4; %Current drawn during other time. [mA]
 Transmissiondata(9,2) = 0.25; %Time of other "standard" operation. [s]
 Transmissiondata(10,2) = 0.5*10^-3; %Current drawn during deep sleep. [mA]
 

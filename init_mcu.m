@@ -1,5 +1,5 @@
 function [MCU] = init_mcu()
-%the output of this function should be 1 big matrix, each column is a
+%the output of this function should be 1 big variable, each column is a
 %different MCU, each row is a different parameter. The following
 %parameters need to be defined:
 % 1) The name of the MCU.
@@ -24,14 +24,14 @@ MCUdata(3,1) = 3.0; %Voltage at which the microcontroller operates. [V]
 MCUdata(4,1) = 0.1; %Current drawn when active. [mA/MHz]
 MCUdata(5,1) = 2; %Extra time in active mode. [s]
 MCUdata(6,1) = 0.0001; %Wake up time. [s]
-MCUdata(7,1) = 0.010; %Current drawn during standby / deepsleep.
+MCUdata(7,1) = 0.010; %Current drawn during standby / deepsleep.[mA]
 MCUdata(8,1) = 32; %Base clock frequency. [MHz]
 
 MCUname(1,2)= "MSP430FR5994";
 MCUdata(2,2) = 24; %Default measurement rate. [n times per day]
 MCUdata(3,2) = 3.0; %Voltage at which the microcontroller operates. [V]
 MCUdata(4,2) = 0.185; %Current drawn when active. [mA/MHz]
-MCUdata(5,2) = 5; %Extra time in active mode. [s]
+MCUdata(5,2) = 2; %Extra time in active mode. [s]
 MCUdata(6,2) = 0.001; %Wake up time. [s]
 MCUdata(7,2) = 0.001; %Current drawn during standby / deepsleep.[mA]
 MCUdata(8,2) = 4; %Base clock frequency. [MHz]

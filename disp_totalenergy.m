@@ -1,9 +1,14 @@
-function disp_totalenergy(Results_totalenergy)
+function disp_totalenergy(Results_totalenergy, losses, Save)
 disp('started disp_totalenergy');
+% losses is used to add losses in the figures on top of every component
+% Save is used in order to determine if plots need to be saved.
+
 set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
+%set(groot, 'defaultFigurePosition', 'factory');
 set(0,'DefaultFigureWindowStyle','docked')  % 'normal' to un-dock
-folder = '/Users/Willemdl/Desktop/TU Delft/BAP/Images';
-Save = true;
+saveasformat ='epsc';
+
+
 P_Sub = Results_totalenergy.P_Sub;
 E_Sub = Results_totalenergy.E_Sub;
 Time = Results_totalenergy.Time;
@@ -11,14 +16,12 @@ T_m = Results_totalenergy.T_m;
 Names = Results_totalenergy.Name;
 %------------ tabel maken met heleboel berekende waardes. (wat nu grafisch
 %is in een (of meerdere) tabellen zetten.
-%--------------- bar graph van componenten energy stacked maken, iedere
-%stackje is dan een stage!
-
 
 %% Extra values that needed to be calculated.
 Time_Max = max(Time);
 NoC = size(P_Sub,2)-2; %Number of Components
 NoS = size(P_Sub,2)-4;%Number of Sensors, -4 due to mcu, transmission, stage number en total columns
+
 %linker as energy rechter as % van totaal (volledig of voor 1 meting?)
 %Step_Vec = [0 ; diff(time)]; %zero added in orderto align the diff vector
 %with power vector
@@ -64,7 +67,7 @@ E_Stages_Perc = (E_Stages_Tot(:) / E_Sub_Tot(end))*100;
 %mogelijk met E_Sub omdat deze al cumulatief is.
 %the logical vector contaning the positions at which the patch is in DS is
 %taken using K_Stages(:,1) 
-losses = 0.1;
+
 E_Stage_Component = zeros(NoC+1,NoStages);
 E_per_k_losses = E_per_k(:,:)*losses;
 %E_Stage_Comp is a matrix, each row is an component and the last row is the
@@ -73,19 +76,13 @@ E_per_k_losses = E_per_k(:,:)*losses;
 for i=1:1:NoStages
     E_Stage_Component(:,i) = sum(E_per_k(K_Stages(:,i),:)).';
 end
-E_Stage_Component(NoC+2,:) = E_Stage_Component(end,:)*losses;
-%E_Stage_Component_losses = E_Stage_Component.*losses;
-
-
-
-
-
-
+E_Stage_Component(end+1,:) = E_Stage_Component(end,:)*losses;
 %% Plot of Total energy, Power and step size vs the time
 figure('Name','geweldige plotjes','NumberTitle','off');
 hour = 3600;
 %subplot(3,1,1);
-plot(Time(:)/hour, E_Sub(:,end-1)/1000);
+losses2 = 1 +losses;
+plot(Time(:)/hour, E_Sub(:,end-1)*losses2/1000);
 title('Total Energy usage during full simulation');
 xlabel('Time [h]');
 xlim([0 Time_Max/hour]);
@@ -93,7 +90,7 @@ ylabel('E [J]');
 legend('Energy');
 grid on;
 if Save
-    saveas(gcf, 'Latexplots\totalenergyusage', 'svg');
+    saveas(gcf, 'Latexplots\totalenergyusage', saveasformat);
 end
 figure();
 %subplot(3,1,2);
@@ -105,7 +102,7 @@ ylabel('Power [mW]');
 legend('Power');
 grid on;
 if Save
-    saveas(gcf, 'Latexplots\totalpowercurve', 'svg');
+    saveas(gcf, 'Latexplots\totalpowercurve', saveasformat);
 end
 
 figure();
@@ -119,7 +116,7 @@ ylabel('Step size [s]');
 grid on;
 
 if Save
-    saveas(gcf, 'Latexplots\totalstepsize', 'svg');
+    saveas(gcf, 'Latexplots\totalstepsize', saveasformat);
 end
 %% plot of specific measurement with pattern of stages, power and energy
 %---------- uitzoeken welke combinaties van intervallen mogelijk zijn,
@@ -131,7 +128,7 @@ M_Plot = 5;
 test = (T_m(M_Plot,2)-T_m(M_Plot,1))/2;
 
 figure();
-sgtitle(['Plot of measurement: ', num2str(M_Plot)])
+%sgtitle(['Plot of measurement: ', num2str(M_Plot)])
 subplot(3,1,1)
 plot(Time(:)/60, P_Sub(:,end));
 xlim([(T_m(M_Plot,1)-test)/60 (T_m(M_Plot,2)+test)/60]);
@@ -159,9 +156,10 @@ ylabel('E [J]');
 legend('Power');
 grid on;
 if Save
-    saveas(gcf, 'Latexplots\total1measurement', 'svg');
+    saveas(gcf, 'Latexplots\total1measurement', saveasformat);
 end
 %% Bar graph of energy and time in [%] per stage
+set(0,'defaultAxesFontSize',20)
 figure();
 %subplot(2,1,1);
 y1 = T_Stages_Perc;
@@ -185,14 +183,14 @@ xtips1 = H1(1).XEndPoints; %makes the text above the bars
 ytips1 = H1(1).YEndPoints;
 labels1 = string(round(H1(1).YData,2));
 text(xtips1,ytips1,labels1,'HorizontalAlignment','center',...
-    'VerticalAlignment','bottom','parent',AX(1));
+    'VerticalAlignment','bottom','parent',AX(1),'fontsize',20);
 xtips2 = H2(2).XEndPoints;
 ytips2 = H2(2).YEndPoints;
 labels2 = string(round(H2(2).YData,2));
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
-    'VerticalAlignment','bottom','parent',AX(2));
+    'VerticalAlignment','bottom','parent',AX(2),'fontsize',20);
 if Save
-    saveas(gcf, 'Latexplots\TimeEnergyBarStagePercentage', 'svg');
+    saveas(gcf, 'Latexplots\totalTimeEnergyBarStagePercentage', saveasformat);
 end
 %% Bar graph Time and Energy in s and mJ per stage
 figure();
@@ -218,19 +216,19 @@ xtips1 = H1(1).XEndPoints; %makes the text above the bars
 ytips1 = H1(1).YEndPoints;
 labels1 = string(round(H1(1).YData,2));
 text(xtips1,ytips1,labels1,'HorizontalAlignment','center',...
-    'VerticalAlignment','bottom','parent',AX(1));
+    'VerticalAlignment','bottom','parent',AX(1),'fontsize',20);
 xtips2 = H2(2).XEndPoints;
 ytips2 = H2(2).YEndPoints;
 labels2 = string(round(H2(2).YData,2));
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
-    'VerticalAlignment','bottom','parent',AX(2));
+    'VerticalAlignment','bottom','parent',AX(2),'fontsize',20);
 if Save
-    saveas(gcf, 'Latexplots\totalTimeEnergyBarStage', 'svg');
+    saveas(gcf, 'Latexplots\totalTimeEnergyBarStage', saveasformat);
 end
 %% Bar graph Time and Power in s and mW per stage
 figure();
 y1 = T_Stages_Tot;
-y2 = [P_Stages_Max P_Stages_Min];
+y2 = [P_Stages_Max];
 x = NoStages;
 [AX,H1,H2]=plotyy(1:x,[y1 nan(x,1)],1:x,[nan(x,1) y2],@bar,@bar);
 linkaxes(AX,'x');
@@ -238,7 +236,7 @@ title('Time and power per stage');
 ylabel(AX(1),'Time [s]');
 ylabel(AX(2),'Power [mW]');
 %https://nl.mathworks.com/help/matlab/ref/matlab.graphics.axis.axes-properties.html
-set(AX, 'XTick', 1:1:x,'XTickLabelRotation',45,'xticklabel',cellstr(Stagesnames(1,:)));
+set(AX, 'XTick', 1:1:x,'XTickLabelRotation',0,'xticklabel',cellstr(Stagesnames(1,:)));
 set(AX, 'XGrid', 'on', 'YGrid', 'on');
 set(H1,'FaceColor','#0072BD')
 set(H2,'FaceColor','#D95319')
@@ -256,13 +254,13 @@ ytips2 = H2(2).YEndPoints;
 labels2 = string(round(H2(2).YData,4));
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
     'VerticalAlignment','bottom','parent',AX(2));
-xtips3 = H2(2).XEndPoints;
-ytips3 = H2(2).YEndPoints;
-labels3 = string(round(H2(3).YData,4));
-text(xtips3,ytips3,labels3,'HorizontalAlignment','center',...
-    'VerticalAlignment','bottom','parent',AX(2));
+% xtips3 = H2(2).XEndPoints;
+% ytips3 = H2(2).YEndPoints;
+% labels3 = string(round(H2(3).YData,4));
+% text(xtips3,ytips3,labels3,'HorizontalAlignment','center',...
+%     'VerticalAlignment','bottom','parent',AX(2));
 if Save
-    saveas(gcf, 'Latexplots\totalTimePowerBarStage', 'svg');
+    saveas(gcf, 'Latexplots\totalTimePowerBarStage', saveasformat);
 end
 %% Bar graph energy and maximum power per component in mJ and mW
 figure();
@@ -271,12 +269,12 @@ y2 = P_Sub_Max.';
 x = NoC+1;% extra bar with Total values
 [AX,H1,H2]=plotyy(1:x,[y1 nan(x,1)],1:x,[nan(x,1) y2],@bar,@bar);
 linkaxes(AX,'x');
-title('Energy usage and maximum power per Component');
+title('Energy usage and maximum power per component');
 ylabel(AX(1),'Energy usage [mJ]');
 ylabel(AX(2),'maximum power [mW]');
 %legend([H1(1) H2(1)],'Deep Sleep','Measuring');
 %https://nl.mathworks.com/help/matlab/ref/matlab.graphics.axis.axes-properties.html
-set(AX, 'XTick', 1:1:x,'XTickLabelRotation',45,'xticklabel',cellstr(Names(1,:)));
+set(AX, 'XTick', 1:1:x,'XTickLabelRotation',0,'xticklabel',cellstr(Names(1,:)));
 set(AX, 'XGrid', 'on', 'YGrid', 'on');
 set(H1,'FaceColor','#0072BD')
 set(H2,'FaceColor','#D95319')
@@ -288,14 +286,14 @@ xtips1 = H1(1).XEndPoints; %makes the text above the bars
 ytips1 = H1(1).YEndPoints;
 labels1 = string(round(H1(1).YData,2));
 text(xtips1,ytips1,labels1,'HorizontalAlignment','center',...
-    'VerticalAlignment','bottom','parent',AX(1));
+    'VerticalAlignment','bottom','parent',AX(1),'fontsize',20);
 xtips2 = H2(2).XEndPoints;
 ytips2 = H2(2).YEndPoints;
 labels2 = string(round(H2(2).YData,2));
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
-    'VerticalAlignment','bottom','parent',AX(2));
+    'VerticalAlignment','bottom','parent',AX(2),'fontsize',20);
 if Save
-    saveas(gcf, 'Latexplots\totalEnergyPowerBarComponent', 'svg');
+    saveas(gcf, 'Latexplots\totalEnergyPowerBarComponent', saveasformat);
 end
 %% Bar graph energy and maximum power per component in [%]
 figure();
@@ -322,48 +320,49 @@ xtips1 = H1(1).XEndPoints; %makes the text above the bars
 ytips1 = H1(1).YEndPoints;
 labels1 = string(round(H1(1).YData,2));
 text(xtips1,ytips1,labels1,'HorizontalAlignment','center',...
-    'VerticalAlignment','bottom','parent',AX(1));
+    'VerticalAlignment','bottom','parent',AX(1),'fontsize',20);
 xtips2 = H2(2).XEndPoints;
 ytips2 = H2(2).YEndPoints;
 labels2 = string(round(H2(2).YData,2));
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center',...
-    'VerticalAlignment','bottom','parent',AX(2));
+    'VerticalAlignment','bottom','parent',AX(2),'fontsize',20);
 if Save
-    saveas(gcf, 'Latexplots\totalEnergyPowerBarComponentPercentage', 'svg');
+    saveas(gcf, 'Latexplots\totalEnergyPowerBarComponentPercentage', saveasformat);
 end
-%% 
-Names1 = [Names "losses"];
-ybar = [E_Stage_Component ];%sum(E_Stage_Component_losses,2)];
+%% Bar energy stacked per component incl losses
+Names1 = [Names];
+ybar = [E_Stage_Component(1:end-1,:) sum((E_Stage_Component(1:end-1,:)*losses),2)];
 figure();
 X = categorical(Names1);
 X = reordercats(X,Names1);
 b = bar(X,ybar/1000,'stacked');
-legend([Stagesnames]);
+legend([Stagesnames "losses"],'location','bestoutside');
 title('Bargraph of energy consumed per component');
 xlabel('Components');
 ylabel('Energy [J]')
 if Save
-    saveas(gcf, 'Latexplots\totalEnergyBarComponentstacked', 'svg');
+    saveas(gcf, 'Latexplots\totalEnergyBarComponentstacked', saveasformat);
 end
-
-%% 
+%% Bar energy stacked per stage
 Names1 = [Names(1:end-1) "losses"];
 %row = x axis 
 %column = y
-ybar(6,:) = [];
-ybar2 = permute(ybar, [2 1]);
+ybartemp = E_Stage_Component(1:end-1,:);%remove losses component/row
+ybartemp(6,:) = [];%remove total "component"/row
+ybartemp = permute(ybartemp, [2 1]); %convert rows to columns and columns to rows
+ybar = [ybartemp sum(ybartemp*losses,2)];
 figure();
 X = categorical([Stagesnames]);
 X = reordercats(X,[Stagesnames]);
-b = bar(X,ybar2/1000,'stacked');
+b = bar(X,ybar/1000,'stacked');
 legend([Names1]);
 title('Bargraph of energy consumed per stage');
 xlabel('Stages');
 ylabel('Energy [J]')
 if Save
-    saveas(gcf, 'Latexplots\totalEnergyBarStagestacked', 'svg');
+    saveas(gcf, 'Latexplots\totalEnergyBarStagestacked', saveasformat);
 end
-%% 
+%% Bar max power components
 figure();
 X = categorical([Names]);
 X = reordercats(X,[Names]);
@@ -373,9 +372,8 @@ title('Bargraph of maximum power per component');
 xlabel('Components');
 ylabel('Power [mW]')
 if Save
-    saveas(gcf, 'Latexplots\totalPowerComponents', 'svg');
+    saveas(gcf, 'Latexplots\totalPowerComponents', saveasformat);
 end
-
 %% Table of important values EXAMPLE
 %https://nl.mathworks.com/help/matlab/ref/uitable.html
 %https://nl.mathworks.com/help/matlab/ref/matlab.ui.control.table-properties.html
