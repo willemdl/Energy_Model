@@ -20,12 +20,22 @@ for x=1:1:NoB
     Energy(x) = B.Energy(x)*B.Voltage(x);%[mWh]
 end
 
-
-
+R_B.Brand = B.Brand;
+R_B.Name = B.Name;
+R_B.Chemistry = B.Chemistry;
+R_B.Height = B.Height;
+R_B.Width = B.Width;
+R_B.Length = B.Length;
+R_B.Diameter = B.Diameter;
+R_B.Weight = B.Weight;
+R_B.Energy = Energy;
+R_B.NomDischarge = B.NomDischarge;
+R_B.PeakDischarge = B.PeakDischarge;
+R_B.Voltage = B.Voltage;
 R_B.Size = Size;
 R_B.Edensity = Edensity; %mWh/cm^3
 R_B.Pdensitypeak = Pdensitypeak;
 R_B.Pdensitynom = Pdensitynom;
-R_B.Energy = Energy;
+
 
 end

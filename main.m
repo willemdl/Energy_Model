@@ -43,8 +43,9 @@ Save = false;
 %set(groot, 'defaultFigurePosition', get(0, 'Screensize'));
 set(groot, 'defaultFigurePosition', 'factory');
 set(0,'DefaultFigureWindowStyle','docked')  % 'normal' to un-dock
-%disp_totalenergy(Results_calc_totalenergy, losses, Save);
+disp_batteries(R_Batteries,Save);
 disp_sensors(Results_calc_sensors, Selected_Sensors_Names, Save);
-%disp_batteries(R_Batteries,Save);
+disp_totalenergy(Results_calc_totalenergy, losses, Save);
+
 
 

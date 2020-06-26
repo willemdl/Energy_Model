@@ -2,15 +2,15 @@ function [] = disp_batteries(B,Save)
 
 SaveAs = 'epsc';
 
-
-[Sorted_Size, new_indices] = sort(Size); % sorts in *ascending* order
+NoB = size(B.Height,1);
+[Sorted_Size, new_indices] = sort(B.Size); % sorts in *ascending* order
 Sorted_labels = string(B.Name(new_indices)); 
 Sorted_chem = string(B.Chemistry(new_indices));
 Sorted_Voltage = B.Voltage(new_indices);
-Sorted_Energy = Energy(new_indices);
-Sorted_Edensity = Edensity(new_indices);
-Sorted_Pdensitynom = Pdensitynom(new_indices);
-Sorted_Pdensitypeak = Pdensitypeak(new_indices);
+Sorted_Energy = B.Energy(new_indices);
+Sorted_Edensity = B.Edensity(new_indices);
+Sorted_Pdensitynom = B.Pdensitynom(new_indices);
+Sorted_Pdensitypeak = B.Pdensitypeak(new_indices);
 Sorted_PeakDischarge = B.PeakDischarge(new_indices);
 Sorted_NomDischarge = B.NomDischarge(new_indices);
 %Sorted_Height = B.Height(new_indices).';
